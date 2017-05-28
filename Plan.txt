@@ -1,0 +1,10 @@
+Roslyn api is still actual, for example last .NEXT.
+
+If we talk about F#, we don't need to make an overview. Unfortunately, there are a lot of .NET developers who's never tryed to use roslyn api (Microsoft.CodeAnalysis).
+
+The good news is that there are a lot of resources about this topic (joshvarty.wordpress.com, Teplaykov, etc.). The bad news is that it isn't enough. We still can face some problems in the beginign of learning curve.
+
+So, I don't want to make and overview or introduction to Roslyn Analysers. No, I'm going to make an startup guide to Microsoft.CodeAnalysis.
+
+-----------------------------------------------
+Usually, every presenter shows a syntax tree [Slide1], but don't put enough emphsis on it.
