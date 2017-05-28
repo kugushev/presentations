@@ -11,7 +11,9 @@ namespace Demo
     {
         static void Main(string[] args)
         {
-            CSharpSyntaxTree.ParseText("");
+            var tree = CSharpSyntaxTree.ParseText("");
+            var root = tree.GetRoot();
+            
         }
     }
 }
