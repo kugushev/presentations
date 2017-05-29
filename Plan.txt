@@ -24,4 +24,15 @@ Ok, we've finished. And lets look to the result [Slide6]. Of course, roslyn anal
 -----------------------------------------------
 [Slide6:Demo] Ok, lets move further. Usually, if you research a new technology, you have only one question at the begining: how to start. I believe, we should do some livecoding.
 
-Here we have a typical console application with reference to Microsoft.CodeAnalysis Nuget package.
+Here we have a typical console application with reference to Microsoft.CodeAnalysis Nuget package. There is a good convention: LangiageName + Class. In this case we want to find syntax tree for our c# code. So, lets try to find it: CSharpSyntaxTree. Don't worry about constructor, there are a lot of static factories.
+
+var tree = CSharpSyntaxTree.ParseText("....");
+
+Ok, we have a tree, but what can we do further? I don't know too. Really, the fact is that Microsoft.CodeAnalysis has a little bit complicated api. But good news is that this code is easy to debug. So, lets do it:
+......debug......
+
+Ok, there is a better way to see the similiar tree; syntax visualizer. There is a good lifehack: add source code as content.
+
+
+
+
