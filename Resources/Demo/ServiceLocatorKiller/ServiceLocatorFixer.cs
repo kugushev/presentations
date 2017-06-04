@@ -38,10 +38,12 @@ namespace ServiceLocatorKiller
             var executions = cls.DescendantNodes().OfType<InvocationExpressionSyntax>()
                 .Where(IsServiceLocatorUsage); ;
 
+            // replace all occurencies of that invocation
             cls = cls.ReplaceNodes(executions, (orig, same) => SyntaxFactory.IdentifierName(toFieldName(GetServiceType(same))));
 
             foreach (TypeSyntax type in executions.Select(GetServiceType).Distinct(new SyntaxNodeEquivalenceComparer()))
             {
+                // if not existst add ctor
                 if (GetSuitableCtor(cls) == null)
                 {
                     cls = cls.InsertNodesBefore(cls.Members.First(), new[]
@@ -54,6 +56,7 @@ namespace ServiceLocatorKiller
 
                 string typeName = toCamelCase(type);
                 string fieldName = toFieldName(type);
+                // add field
                 cls = cls.InsertNodesAfter(GetSuitableCtor(cls), new[]
                 {
                         SyntaxFactory.FieldDeclaration(
@@ -62,9 +65,12 @@ namespace ServiceLocatorKiller
                 });
 
                 ConstructorDeclarationSyntax ctor = GetSuitableCtor(cls);
+
                 cls = cls.ReplaceNode(ctor, ctor
+                // add argument to ctor
                     .AddParameterListParameters(
                         SyntaxFactory.Parameter(SyntaxFactory.Identifier(typeName)).WithType(type))
+                // add assignments to ctor
                     .AddBodyStatements(
                     SyntaxFactory.ExpressionStatement(
                         SyntaxFactory.AssignmentExpression(

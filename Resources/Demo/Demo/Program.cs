@@ -19,14 +19,15 @@ namespace Demo
             cls = cls.AddModifiers(
                 SyntaxFactory.Token(SyntaxKind.PublicKeyword),
                 SyntaxFactory.Token(SyntaxKind.VirtualKeyword));
-            
+
+            AAA();
 
             Console.WriteLine(cls.NormalizeWhitespace());
             Console.ReadLine();
 
         }
 
-        void AAA()
+        static void AAA()
         {
             var tree = CSharpSyntaxTree.ParseText(
                 File.ReadAllText("TestClass.cs"));
