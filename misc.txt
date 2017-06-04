@@ -23,6 +23,7 @@ OK: now we should
                 // add assignments to ctor
                 // replace all occurencies of that invocation
 			you'd be wondered if i told you that we can do it in one line :)
+Before that, lets check how Distinct works: of course every TypeSyntax is unique. Lets use IsEquivalent
 FIrst - create ctor if not exitst. Where is this Ctors property???0_o
 method AddMembers() immutable!
 SyntaxFacotry - for every node
@@ -36,7 +37,7 @@ Ctor should be in beginign, use InsertBefore
 we want to add argument to ctor - ReplaceNode
 !!! if we have to put statemtnt, lets search somethinf with statent in SyntaxFacotry
 our syntax node is already changed
-			
+so, we should use ReplaceNodes
 
 
 Aaaa, what's whrng with nimespaces!!! 0_o - Normalize

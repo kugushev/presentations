@@ -115,13 +115,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocatorFixer.cs" />
+    <Compile Include="SyntaxNodeEquivalenceComparer.cs" />
     <Content Include="Victim.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="bin\Debug\Victim.csfixed" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

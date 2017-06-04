@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,15 +32,17 @@ namespace ServiceLocatorKiller
 
         private SyntaxNode FixClass(ClassDeclarationSyntax cls)
         {
-            var executions = cls.DescendantNodes().OfType<InvocationExpressionSyntax>()
-                .Where(IsServiceLocatorUsage)
-                .Select(TakeExecutionInfo)
-                .GroupBy((t) => t.Item1);
+            string toCamelCase(TypeSyntax s) => char.ToLowerInvariant(s.ToFullString()[0]) + s.ToFullString().Substring(1);
+            string toFieldName(TypeSyntax s) => "_" + toCamelCase(s);
 
-            foreach (var byType in executions)
+            var executions = cls.DescendantNodes().OfType<InvocationExpressionSyntax>()
+                .Where(IsServiceLocatorUsage); ;
+
+            cls = cls.ReplaceNodes(executions, (orig, same) => SyntaxFactory.IdentifierName(toFieldName(GetServiceType(same))));
+
+            foreach (TypeSyntax type in executions.Select(GetServiceType).Distinct(new SyntaxNodeEquivalenceComparer()))
             {
-                ConstructorDeclarationSyntax ctor = cls.Members.OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
-                if (ctor == null)
+                if (GetSuitableCtor(cls) == null)
                 {
                     cls = cls.InsertNodesBefore(cls.Members.First(), new[]
                     {
@@ -47,39 +50,27 @@ namespace ServiceLocatorKiller
                             .WithBody(SyntaxFactory.Block())
                             .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
                     });
-                    ctor = cls.Members.OfType<ConstructorDeclarationSyntax>().First();
                 }
 
-                TypeSyntax dependencyType = byType.Key;
-                string dependencyTypeName = dependencyType.ToFullString();
-                string fieldName = "_" + dependencyTypeName;
-                cls = cls.InsertNodesAfter(ctor, new[]
+                string typeName = toCamelCase(type);
+                string fieldName = toFieldName(type);
+                cls = cls.InsertNodesAfter(GetSuitableCtor(cls), new[]
                 {
                         SyntaxFactory.FieldDeclaration(
-                            SyntaxFactory.VariableDeclaration(dependencyType).AddVariables(
+                            SyntaxFactory.VariableDeclaration(type).AddVariables(
                                 SyntaxFactory.VariableDeclarator(fieldName)))
                 });
-                ctor = cls.Members.OfType<ConstructorDeclarationSyntax>().First();
 
-                cls = cls.ReplaceNode(ctor, ctor.AddParameterListParameters(
-                    SyntaxFactory.Parameter(SyntaxFactory.Identifier(dependencyTypeName)).WithType(dependencyType)));
-                ctor = cls.Members.OfType<ConstructorDeclarationSyntax>().First();
-
-                cls = cls.ReplaceNode(ctor, ctor.AddBodyStatements(
+                ConstructorDeclarationSyntax ctor = GetSuitableCtor(cls);
+                cls = cls.ReplaceNode(ctor, ctor
+                    .AddParameterListParameters(
+                        SyntaxFactory.Parameter(SyntaxFactory.Identifier(typeName)).WithType(type))
+                    .AddBodyStatements(
                     SyntaxFactory.ExpressionStatement(
                         SyntaxFactory.AssignmentExpression(
                             SyntaxKind.SimpleAssignmentExpression,
                             SyntaxFactory.IdentifierName(fieldName),
-                            SyntaxFactory.IdentifierName(dependencyTypeName)))));
-
-                foreach (var occurrence in byType)
-                {
-                    InvocationExpressionSyntax node = occurrence.Item2;
-                    SyntaxNode current = FindNode(cls, node);
-                    cls = cls.ReplaceNode(current, SyntaxFactory.IdentifierName(fieldName));
-                }
-
-                // replace all occurencies of that invocation
+                            SyntaxFactory.IdentifierName(typeName)))));
             }
 
             return cls;
@@ -92,24 +83,27 @@ namespace ServiceLocatorKiller
                 member.Expression is IdentifierNameSyntax className &&
                 member.Name is GenericNameSyntax genericMethod)
             {
-                return className.Identifier.ToFullString() == "ServiceLocator" &&
-                    genericMethod.Identifier.ToFullString() == "Resolve";
+                return className.Identifier.ToString() == "ServiceLocator" &&
+                    genericMethod.Identifier.ToString() == "Resolve";
 
             }
             return false;
         }
 
-        private (TypeSyntax, InvocationExpressionSyntax) TakeExecutionInfo(InvocationExpressionSyntax node)
+        private TypeSyntax GetServiceType(InvocationExpressionSyntax node)
         {
             if (node.Expression is MemberAccessExpressionSyntax member &&
                 member.Expression is IdentifierNameSyntax className &&
                 member.Name is GenericNameSyntax genericMethod)
             {
-                return (genericMethod.TypeArgumentList.Arguments.Single(), node);
+                return genericMethod.TypeArgumentList.Arguments.Single();
             }
             else
                 throw new Exception("Something wrong");
         }
+
+        private static ConstructorDeclarationSyntax GetSuitableCtor(ClassDeclarationSyntax cls)
+            => cls.Members.OfType<ConstructorDeclarationSyntax>().OrderBy(c => c.ParameterList.Parameters.Count).FirstOrDefault();
 
         private IEnumerable<ClassDeclarationSyntax> FindClassDeclarations(SyntaxNode parent)
         {
