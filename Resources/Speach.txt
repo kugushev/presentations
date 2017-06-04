@@ -1,0 +1,38 @@
+Roslyn api is still actual, for example last .NEXT.
+
+If we talk about F#, we don't need to make an overview. Unfortunately, there are a lot of .NET developers who's never tryed to use roslyn api (Microsoft.CodeAnalysis).
+
+The good news is that there are a lot of resources about this topic (joshvarty.wordpress.com, Teplaykov, etc.). The bad news is that it isn't enough. We still can face some problems in the beginign of learning curve.
+
+So, I don't want to make and overview or introduction to Roslyn Analysers. No, I'm going to make an startup guide to Microsoft.CodeAnalysis.
+-----------------------------------------------
+Usually, every presenter shows a syntax tree [Slide2:Syntax tree using LinqPad], but don't put enough emphsis on it. Ok, it looks simple, but can you understand more complicated syntax tree [Slide3: Comlicated syntax tree using LinqPad]? Moreover, I've noticed that there are a lot of developers who don't understan how to parse it. So, why don't we play a game.
+
+First of all, I want to take a few volunteers: Mr Lexer, Mr ClassDeclaration, Mr MethodDeclaration, Mr InvocationExpression. [Give appropriate lists: Name, Scheme, Parent]. Guys, please, sit down and don't look at the scree. During this game we are going to build a syntax tree [Slide4: Source code].
+class TestClass
+{
+    void TestMethod()
+    {
+        WriteLine("Hello World");
+    }
+}
+Lexer, you should read this text, using only words and special symbols. I'm a root, so, I'm staying. There is only one possible child of root in this case: ClassDeclaration. So, if I give you a wordcard and it's suitable for you, you should take it. If it's not suilable, but you have a child, please give this card to your child. End so on.
+
+[Slide5: Left - code with highlites, Right - syntax tree nodes] Every word appears at every parsing step.
+
+Ok, we've finished. And lets look to the result [Slide6]. Of course, roslyn analyzer doesing use the same allorythm, but the core idea the similar.
+-----------------------------------------------
+[Slide6:Demo] Ok, lets move further. Usually, if you research a new technology, you have only one question at the begining: how to start. I believe, we should do some livecoding.
+
+Here we have a typical console application with reference to Microsoft.CodeAnalysis Nuget package. There is a good convention: LangiageName + Class. In this case we want to find syntax tree for our c# code. So, lets try to find it: CSharpSyntaxTree. Don't worry about constructor, there are a lot of static factories.
+
+var tree = CSharpSyntaxTree.ParseText("....");
+
+Ok, we have a tree, but what can we do further? I don't know too. Really, the fact is that Microsoft.CodeAnalysis has a little bit complicated api. But good news is that this code is easy to debug. So, lets do it:
+......debug......
+
+Ok, there is a better way to see the similiar tree; syntax visualizer. There is a good lifehack: add source code as content.
+
+
+
+
