@@ -18,16 +18,16 @@ namespace ServiceLocatorKiller
 
             SyntaxNode root = tree.GetRoot();
 
-            var classes = FindClassDeclarations(root);
+            ClassDeclarationSyntax cls = FindClassDeclarations(root).FirstOrDefault();
 
-            SyntaxNode fixedRoot = root;
-            foreach (var cls in classes)
+            if (cls != null)
             {
                 SyntaxNode fixedClass = FixClass(cls);
-                fixedRoot = root.ReplaceNode(cls, fixedClass);
+                SyntaxNode fixedRoot = root.ReplaceNode(cls, fixedClass);
+                
+                return fixedRoot.NormalizeWhitespace().ToFullString();
             }
-
-            return fixedRoot.NormalizeWhitespace().ToFullString();
+            return source;
         }
 
         private SyntaxNode FixClass(ClassDeclarationSyntax cls)

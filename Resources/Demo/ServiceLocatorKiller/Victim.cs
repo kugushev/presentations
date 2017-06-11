@@ -11,11 +11,24 @@ namespace ServiceLocatorKiller
     {
         public int FeedMonster()
         {
-            var cookies = ServiceLocator.Resolve<CookieService>();
-            ServiceLocator.Resolve<CookieMonster>().Notify(cookies.Kind);
-            cookies.Consuming += count => ServiceLocator.Resolve<CookiesWarehouse>().Send(count);
-            cookies.Feed(ServiceLocator.Resolve<CookieMonster>());
-            return ServiceLocator.Resolve<CookiesWarehouse>().Left;
+            var cookies = ServiceLocator
+                .Resolve<CookieService>();
+
+            ServiceLocator
+                .Resolve<CookieMonster>()
+                .Notify(cookies.Kind);
+
+            cookies.Consuming += count
+                => ServiceLocator
+                    .Resolve<CookiesWarehouse>()
+                    .Send(count);
+
+            cookies.Feed(
+                ServiceLocator.Resolve<CookieMonster>());
+
+            return ServiceLocator
+                .Resolve<CookiesWarehouse>()
+                .Left;
         }
     }
 }

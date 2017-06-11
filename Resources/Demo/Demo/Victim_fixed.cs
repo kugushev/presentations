@@ -8,7 +8,8 @@ namespace ServiceLocatorKiller
 {
     class Victim
     {
-        public Victim(CookieService cookieService, CookieMonster cookieMonster, CookiesWarehouse cookiesWarehouse)
+        public Victim(CookieService cookieService, 
+            CookieMonster cookieMonster, CookiesWarehouse cookiesWarehouse)
         {
             _cookieService = cookieService;
             _cookieMonster = cookieMonster;
