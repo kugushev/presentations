@@ -24,7 +24,7 @@ namespace ServiceLocatorKiller
             {
                 SyntaxNode fixedClass = FixClass(cls);
                 SyntaxNode fixedRoot = root.ReplaceNode(cls, fixedClass);
-                
+
                 return fixedRoot.NormalizeWhitespace().ToFullString();
             }
             return source;
@@ -39,12 +39,14 @@ namespace ServiceLocatorKiller
                 .Where(IsServiceLocatorUsage); ;
 
             // replace all occurencies of that invocation
+            /*at the last*/
             cls = cls.ReplaceNodes(executions, (orig, same) => SyntaxFactory.IdentifierName(toFieldName(GetServiceType(same))));
 
             foreach (TypeSyntax type in executions.Select(GetServiceType).Distinct(new SyntaxNodeEquivalenceComparer()))
             {
-                // if not existst add ctor
-                if (GetSuitableCtor(cls) == null)
+                // if not exists add ctor
+                ConstructorDeclarationSyntax ctor = GetSuitableCtor(cls);
+                if (ctor == null)
                 {
                     cls = cls.InsertNodesBefore(cls.Members.First(), new[]
                     {
@@ -64,7 +66,7 @@ namespace ServiceLocatorKiller
                                 SyntaxFactory.VariableDeclarator(fieldName)))
                 });
 
-                ConstructorDeclarationSyntax ctor = GetSuitableCtor(cls);
+                ctor = GetSuitableCtor(cls);
 
                 cls = cls.ReplaceNode(ctor, ctor
                 // add argument to ctor
@@ -130,6 +132,19 @@ namespace ServiceLocatorKiller
             SyntaxNode parent = FindNode(cls, node.Parent);
 
             return parent.ChildNodes().Where(n => n.IsEquivalentTo(node, true)).Single();
+        }
+
+        public string GetSampleClass()
+        {
+            var node = SyntaxFactory.ClassDeclaration("MyClass")
+                .WithLeadingTrivia(
+                SyntaxFactory.TriviaList(
+                    SyntaxFactory.SyntaxTrivia(
+                        SyntaxKind.SingleLineCommentTrivia, "//This is my class")))
+                .WithTrailingTrivia(
+                SyntaxFactory.TriviaList(
+                    SyntaxFactory.SyntaxTrivia(SyntaxKind.SingleLineCommentTrivia, "//My class is amazing")));
+            return node.NormalizeWhitespace().ToFullString();
         }
     }
 }
