@@ -15,8 +15,20 @@ namespace Example
         public string Fix(string source)
         {
             SyntaxTree tree = CSharpSyntaxTree.ParseText(source);
+            SyntaxNode root = tree.GetRoot();
 
-            return null;
+            ClassDeclarationSyntax cls = root.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+
+            SyntaxNode fixedClass = FixClass(cls);
+
+            SyntaxNode fixedRoot = root.ReplaceNode(cls, fixedClass);
+
+
+            return fixedRoot.NormalizeWhitespace().ToFullString();
+        }
+        SyntaxNode FixClass(ClassDeclarationSyntax cls)
+        {
+            return cls;
         }
 
         #region Fog of war

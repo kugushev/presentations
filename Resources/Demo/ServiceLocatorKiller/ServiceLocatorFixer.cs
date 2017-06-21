@@ -18,7 +18,7 @@ namespace ServiceLocatorKiller
 
             SyntaxNode root = tree.GetRoot();
 
-            ClassDeclarationSyntax cls = FindClassDeclarations(root).FirstOrDefault();
+            ClassDeclarationSyntax cls = root.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
 
             if (cls != null)
             {

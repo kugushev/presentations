@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Editing;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace SpeachFollower.Fix
@@ -29,12 +30,12 @@ namespace SpeachFollower.Fix
 
             void Register(string name, Func<SyntaxNode> createNoteToEnqueue)
             {
-                var action = CodeAction.Create("Create source tree", t =>
+                var action = CodeAction.Create(name, t =>
                 {
                     var returnStatement = method.Body.Statements.OfType<ReturnStatementSyntax>().LastOrDefault();
                     var newNode = createNoteToEnqueue();
 
-                    var updated = method.InsertNodesBefore(returnStatement, new[] { newNode });
+                    var updated = method.InsertNodesBefore(returnStatement, new[] { newNode.WithLeadingTrivia(returnStatement.GetLeadingTrivia()) });
 
                     var newRoot = root.ReplaceNode(method, updated);
                     var newdoc = context.Document.WithSyntaxRoot(newRoot);
@@ -43,7 +44,7 @@ namespace SpeachFollower.Fix
                 context.RegisterRefactoring(action);
             }
 
-            Register("Create source tree",
+            Register("1. Create source tree",
                 () => LocalDeclarationStatement(
                         VariableDeclaration(
                             ParseTypeName("SyntaxTree"),
@@ -57,44 +58,130 @@ namespace SpeachFollower.Fix
                                             )))
                             }))).NormalizeWhitespace());
 
-            //#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-            //            var action = CodeAction.Create("Create source tree", async t =>
-            //                {
-            //                    var returnStatement = method.Body.Statements.OfType<ReturnStatementSyntax>().LastOrDefault();
-            //                    var tree = LocalDeclarationStatement(
-            //                        VariableDeclaration(
-            //                            ParseTypeName("SyntaxTree"),
-            //                            SeparatedList(new[]
-            //                            {
-            //                                VariableDeclarator("tree").WithInitializer(
-            //                                    EqualsValueClause(
-            //                                        InvocationExpression(
-            //                                            MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, IdentifierName("CSharpSyntaxTree"), IdentifierName("ParseText")),
-            //                                            ArgumentList(SeparatedList(new [] { Argument(IdentifierName("source")) }))
-            //                                            )))
-            //                            }))).NormalizeWhitespace();
+            Register("2. Get root",
+                () => LocalDeclarationStatement(
+                    VariableDeclaration(
+                        ParseTypeName("SyntaxNode"),
+                        SeparatedList(new[]
+                        {
+                            VariableDeclarator("root").WithInitializer(
+                                EqualsValueClause(
+                                    InvocationExpression(
+                                        MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, IdentifierName("tree"), IdentifierName("GetRoot"))
+                                        )))
+                        }))).NormalizeWhitespace());
 
-            //                    var updated = method.InsertNodesBefore(returnStatement, new[] { tree });
+            Register("3. Find class",
+                () => LocalDeclarationStatement(
+                    VariableDeclaration(
+                        ParseTypeName("ClassDeclarationSyntax"),
+                        SeparatedList(new[]
+                        {
+                            VariableDeclarator("cls").WithInitializer(
+                                EqualsValueClause(
+                                    InvocationExpression(
+                                        MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+                                            InvocationExpression(
+                                                MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+                                                    InvocationExpression(
+                                                        MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, IdentifierName("root"), IdentifierName("DescendantNodes"))),
+                                                    GenericName("OfType").WithTypeArgumentList(TypeArgumentList(SeparatedList(new[]{ ParseTypeName("ClassDeclarationSyntax") })))
+                                            )),
+                                            IdentifierName("FirstOrDefault")
+                                            ))))
+                        }))).NormalizeWhitespace());
 
-            //                    var newRoot = root.ReplaceNode(method, updated);                    
-            //                    return context.Document.WithSyntaxRoot(newRoot);
-            //                });
-            //#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-            //            context.RegisterRefactoring(action);
+            {
+                var fixClassAction = CodeAction.Create("4. Create FixClass", async t =>
+                {
+                    var returnStatement = method.Body.Statements.OfType<ReturnStatementSyntax>().LastOrDefault();
+                    var fixClassExecution = LocalDeclarationStatement(
+                        VariableDeclaration(
+                            ParseTypeName("SyntaxNode"),
+                            SeparatedList(new[]
+                            {
+                                VariableDeclarator("fixedClass").WithInitializer(
+                                    EqualsValueClause(
+                                        InvocationExpression(
+                                            IdentifierName("FixClass"),
+                                            ArgumentList(SeparatedList(new [] { Argument(IdentifierName("cls")) }))
+                                            )))
+                            }))).NormalizeWhitespace();
+
+                    var classDeclaration = method.Parent;
+                    var fixClassDecalaration = MethodDeclaration(ParseTypeName("SyntaxNode"), "FixClass")
+                            .AddParameterListParameters(Parameter(Identifier("cls")).WithType(ParseTypeName("ClassDeclarationSyntax")))
+                            .AddBodyStatements(new[]
+                            {
+                                ReturnStatement(IdentifierName("cls"))
+                            });
+
+                    var editor = await DocumentEditor.CreateAsync(context.Document);
+                    editor.InsertBefore(returnStatement, fixClassExecution.WithLeadingTrivia(returnStatement.GetLeadingTrivia()));
+                    editor.InsertAfter(method, fixClassDecalaration);
+
+                    return editor.GetChangedDocument();
+                });
+                context.RegisterRefactoring(fixClassAction);
+            }
+
+            Register("5. Create fixed class",
+                () => LocalDeclarationStatement(
+                        VariableDeclaration(
+                            ParseTypeName("SyntaxNode"),
+                            SeparatedList(new[]
+                            {
+                                VariableDeclarator("fixedRoot").WithInitializer(
+                                    EqualsValueClause(
+                                        InvocationExpression(
+                                            MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, IdentifierName("root"), IdentifierName("ReplaceNode")),
+                                            ArgumentList(SeparatedList(new []
+                                            {
+                                                Argument(IdentifierName("cls")),
+                                                Argument(IdentifierName("fixedClass"))
+                                            }))
+                                            )))
+                            }))).NormalizeWhitespace());
+            {
+                var returnFixedClassAction = CodeAction.Create("n. Return fixed class", async t =>
+                {
+                    var returnStatement = method.Body.Statements.OfType<ReturnStatementSyntax>().LastOrDefault();
+                    var updatedReturnStatement = returnStatement.WithExpression(
+                        InvocationExpression(
+                            MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, IdentifierName("fixedRoot"), IdentifierName("ToFullString"))
+                            ));
+
+                    var editor = await DocumentEditor.CreateAsync(context.Document);
+                    editor.ReplaceNode(returnStatement, updatedReturnStatement);
+
+                    return editor.GetChangedDocument();
+                });
+                context.RegisterRefactoring(returnFixedClassAction);
+            }
+
+            {
+                var returnFixedClassAction = CodeAction.Create("n+1. Return fixed class with normalized whitespaces", async t =>
+                {
+                    var returnStatement = method.Body.Statements.OfType<ReturnStatementSyntax>().LastOrDefault();
+                    var updatedReturnStatement = returnStatement.WithExpression(
+                        InvocationExpression(
+                            MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+                                InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, IdentifierName("fixedRoot"), IdentifierName("NormalizeWhitespace"))),
+                                IdentifierName("ToFullString"))
+                            ));
+
+                    var editor = await DocumentEditor.CreateAsync(context.Document);
+                    editor.ReplaceNode(returnStatement, updatedReturnStatement);
+
+                    return editor.GetChangedDocument();
+                });
+                context.RegisterRefactoring(returnFixedClassAction);
+            }
+
+            {
+                Register("Local Function", () => ParseStatement("string toCamelCase(TypeSyntax s) => char.ToLowerInvariant(s.ToFullString()[0]) + s.ToFullString().Substring(1);"));
+            }
         }
 
-        //private static void Register(string name, Func<SyntaxNode> createNoteToEnqueue)
-        //{
-        //    var action = CodeAction.Create("Create source tree", t =>
-        //    {
-        //        var returnStatement = method.Body.Statements.OfType<ReturnStatementSyntax>().LastOrDefault();
-        //        var node = createNoteToEnqueue();
-
-        //        var updated = method.InsertNodesBefore(returnStatement, new[] { node });
-
-        //        var newRoot = root.ReplaceNode(method, updated);
-        //        return context.Document.WithSyntaxRoot(newRoot);
-        //    });
-        //}
     }
 }

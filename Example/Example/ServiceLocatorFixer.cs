@@ -26,18 +26,6 @@ namespace Example
         private static string toFieldName(TypeSyntax s)
             => "_" + toCamelCase(s);
 
-        private IEnumerable<ClassDeclarationSyntax> FindClassDeclarations(SyntaxNode parent)
-        {
-            foreach (var child in parent.ChildNodes())
-            {
-                if (child is ClassDeclarationSyntax cls)
-                    yield return cls;
-                else
-                    foreach (var subcls in FindClassDeclarations(child))
-                        yield return subcls;
-            }
-        }
-
         private bool IsServiceLocatorUsage(InvocationExpressionSyntax node)
         {
             if (node.Expression is MemberAccessExpressionSyntax member &&
