@@ -15,43 +15,24 @@ namespace Example
         public string Fix(string source)
         {
 
+
             return null;
         }
 
         #region Fog of war
+
+        private static string ToCamelCase(SimpleNameSyntax s)
+            => char.ToLowerInvariant(s.Identifier.Text[0]) + s.Identifier.Text.Substring(1);
+
+        private static string ToFieldName(SimpleNameSyntax s)
+            => "_" + ToCamelCase(s);
+
+        private static ConstructorDeclarationSyntax GetSuitableCtor(ClassDeclarationSyntax cls)
+            => cls.Members
+            .OfType<ConstructorDeclarationSyntax>()
+            .OrderBy(c => c.ParameterList.Parameters.Count)
+            .FirstOrDefault();
         
-        private static string toCamelCase(TypeSyntax s)
-            => char.ToLowerInvariant(s.ToFullString()[0]) + s.ToFullString().Substring(1);
-
-        private static string toFieldName(TypeSyntax s)
-            => "_" + toCamelCase(s);
-
-        private bool IsServiceLocatorUsage(InvocationExpressionSyntax node)
-        {
-            if (node.Expression is MemberAccessExpressionSyntax member &&
-                member.Expression is IdentifierNameSyntax className &&
-                member.Name is GenericNameSyntax genericMethod)
-            {
-                return className.Identifier.ToString() == "ServiceLocator" &&
-                    genericMethod.Identifier.ToString() == "Resolve";
-
-            }
-            return false;
-        }
-
-        private TypeSyntax GetServiceType(InvocationExpressionSyntax node)
-        {
-            if (node.Expression is MemberAccessExpressionSyntax member &&
-                member.Expression is IdentifierNameSyntax className &&
-                member.Name is GenericNameSyntax genericMethod)
-            {
-                return genericMethod.TypeArgumentList.Arguments.Single();
-            }
-            else
-                throw new Exception("Something wrong");
-        }
-
-
         #endregion
     }
 }

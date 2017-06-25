@@ -32,32 +32,29 @@ namespace ServiceLocatorKiller
 
         private SyntaxNode FixClass(ClassDeclarationSyntax cls)
         {
-            string toCamelCase(TypeSyntax s) => char.ToLowerInvariant(s.ToFullString()[0]) + s.ToFullString().Substring(1);
-            string toFieldName(TypeSyntax s) => "_" + toCamelCase(s);
 
             var executions = cls.DescendantNodes().OfType<InvocationExpressionSyntax>()
-                .Where(IsServiceLocatorUsage); ;
+                .Where(IsServiceLocatorUsage);
 
             // replace all occurencies of that invocation
             /*at the last*/
-            cls = cls.ReplaceNodes(executions, (orig, same) => SyntaxFactory.IdentifierName(toFieldName(GetServiceType(same))));
+            cls = cls.ReplaceNodes(executions, (orig, same) => SyntaxFactory.IdentifierName(GetFieldName(GetServiceType(same))));
 
-            foreach (TypeSyntax type in executions.Select(GetServiceType).Distinct(new SyntaxNodeEquivalenceComparer()))
+            foreach (SimpleNameSyntax type in executions.Select(GetServiceType).Distinct(new SyntaxNodeEquivalenceComparer()))
             {
                 // if not exists add ctor
-                ConstructorDeclarationSyntax ctor = GetSuitableCtor(cls);
-                if (ctor == null)
+                if (GetSuitableCtor(cls) == null)
                 {
                     cls = cls.InsertNodesBefore(cls.Members.First(), new[]
                     {
                         SyntaxFactory.ConstructorDeclaration(cls.Identifier)
-                            .WithBody(SyntaxFactory.Block())
                             .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
                     });
                 }
 
-                string typeName = toCamelCase(type);
-                string fieldName = toFieldName(type);
+                string typeName = GetFieldName(type);
+                string fieldName = "_" + typeName;
+
                 // add field
                 cls = cls.InsertNodesAfter(GetSuitableCtor(cls), new[]
                 {
@@ -66,13 +63,10 @@ namespace ServiceLocatorKiller
                                 SyntaxFactory.VariableDeclarator(fieldName)))
                 });
 
-                ctor = GetSuitableCtor(cls);
-
+                var ctor = GetSuitableCtor(cls);
                 cls = cls.ReplaceNode(ctor, ctor
-                // add argument to ctor
                     .AddParameterListParameters(
                         SyntaxFactory.Parameter(SyntaxFactory.Identifier(typeName)).WithType(type))
-                // add assignments to ctor
                     .AddBodyStatements(
                     SyntaxFactory.ExpressionStatement(
                         SyntaxFactory.AssignmentExpression(
@@ -84,6 +78,10 @@ namespace ServiceLocatorKiller
             return cls;
         }
 
+        string GetFieldName(SimpleNameSyntax type)
+        {
+            return char.ToLowerInvariant(type.Identifier.Text[0]) + type.Identifier.Text.Substring(1);
+        }
 
         private bool IsServiceLocatorUsage(InvocationExpressionSyntax node)
         {
@@ -91,20 +89,20 @@ namespace ServiceLocatorKiller
                 member.Expression is IdentifierNameSyntax className &&
                 member.Name is GenericNameSyntax genericMethod)
             {
-                return className.Identifier.ToString() == "ServiceLocator" &&
-                    genericMethod.Identifier.ToString() == "Resolve";
+                return className.Identifier.Text == "ServiceLocator" &&
+                    genericMethod.Identifier.Text == "Resolve";
 
             }
             return false;
         }
 
-        private TypeSyntax GetServiceType(InvocationExpressionSyntax node)
+        private SimpleNameSyntax GetServiceType(InvocationExpressionSyntax node)
         {
             if (node.Expression is MemberAccessExpressionSyntax member &&
                 member.Expression is IdentifierNameSyntax className &&
                 member.Name is GenericNameSyntax genericMethod)
             {
-                return genericMethod.TypeArgumentList.Arguments.Single();
+                return (SimpleNameSyntax)genericMethod.TypeArgumentList.Arguments.Single();
             }
             else
                 throw new Exception("Something wrong");

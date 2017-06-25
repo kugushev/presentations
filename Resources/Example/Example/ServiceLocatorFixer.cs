@@ -16,67 +16,86 @@ namespace Example
         {
             SyntaxTree tree = CSharpSyntaxTree.ParseText(source);
             SyntaxNode root = tree.GetRoot();
-
             ClassDeclarationSyntax cls = root.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
-
             SyntaxNode fixedClass = FixClass(cls);
-
             SyntaxNode fixedRoot = root.ReplaceNode(cls, fixedClass);
-
-
             return fixedRoot.NormalizeWhitespace().ToFullString();
         }
+
         SyntaxNode FixClass(ClassDeclarationSyntax cls)
         {
+
+            var executions = cls.DescendantNodes().OfType<InvocationExpressionSyntax>()
+                .Where(IsServiceLocator);
+            cls = cls.ReplaceNodes(executions, (orig, same) => SyntaxFactory.IdentifierName("_" + GetFieldName(GetServiceType(same))));
+
+            foreach (SimpleNameSyntax type in executions.Select(GetServiceType).Distinct(new SyntaxNodeEquivalenceComparer()))
+            {
+                if (GetSuitableCtor(cls) == null)
+                {
+                    cls = cls.InsertNodesBefore(cls.Members.First(), new[]
+                    {
+                        SyntaxFactory.ConstructorDeclaration(cls.Identifier)
+                            .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
+                    });
+                }
+
+                string typeName = char.ToLowerInvariant(type.Identifier.Text[0]) + type.Identifier.Text.Substring(1);
+                string fieldName = "_" + typeName;
+                cls = cls.InsertNodesAfter(GetSuitableCtor(cls), new[]
+                {
+                        SyntaxFactory.FieldDeclaration(
+                            SyntaxFactory.VariableDeclaration(type).AddVariables(
+                                SyntaxFactory.VariableDeclarator(fieldName)))
+                });
+                var ctor = GetSuitableCtor(cls);
+                cls = cls.ReplaceNode(ctor, ctor
+                    .AddParameterListParameters(
+                        SyntaxFactory.Parameter(SyntaxFactory.Identifier(typeName)).WithType(type))
+                    .AddBodyStatements(
+                    SyntaxFactory.ExpressionStatement(
+                        SyntaxFactory.AssignmentExpression(
+                            SyntaxKind.SimpleAssignmentExpression,
+                            SyntaxFactory.IdentifierName(fieldName),
+                            SyntaxFactory.IdentifierName(typeName)))));
+
+            }
+
             return cls;
         }
 
-        #region Fog of war
-
-        private static string toCamelCase(TypeSyntax s)
-            => char.ToLowerInvariant(s.ToFullString()[0]) + s.ToFullString().Substring(1);
-
-        private static string toFieldName(TypeSyntax s)
-            => "_" + toCamelCase(s);
-
-        private IEnumerable<ClassDeclarationSyntax> FindClassDeclarations(SyntaxNode parent)
+        string GetFieldName(SimpleNameSyntax type)
         {
-            foreach (var child in parent.ChildNodes())
-            {
-                if (child is ClassDeclarationSyntax cls)
-                    yield return cls;
-                else
-                    foreach (var subcls in FindClassDeclarations(child))
-                        yield return subcls;
-            }
+            return char.ToLowerInvariant(type.Identifier.Text[0]) + type.Identifier.Text.Substring(1);
         }
 
-        private bool IsServiceLocatorUsage(InvocationExpressionSyntax node)
+        ConstructorDeclarationSyntax GetSuitableCtor(ClassDeclarationSyntax cls)
+        {
+            return cls.Members.OfType<ConstructorDeclarationSyntax>().OrderBy(c => c.ParameterList.Parameters.Count).FirstOrDefault();
+        }
+
+        SimpleNameSyntax GetServiceType(InvocationExpressionSyntax node)
         {
             if (node.Expression is MemberAccessExpressionSyntax member &&
                 member.Expression is IdentifierNameSyntax className &&
                 member.Name is GenericNameSyntax genericMethod)
             {
-                return className.Identifier.ToString() == "ServiceLocator" &&
-                    genericMethod.Identifier.ToString() == "Resolve";
-
-            }
-            return false;
-        }
-
-        private TypeSyntax GetServiceType(InvocationExpressionSyntax node)
-        {
-            if (node.Expression is MemberAccessExpressionSyntax member &&
-                member.Expression is IdentifierNameSyntax className &&
-                member.Name is GenericNameSyntax genericMethod)
-            {
-                return genericMethod.TypeArgumentList.Arguments.Single();
+                return (SimpleNameSyntax)genericMethod.TypeArgumentList.Arguments.Single();
             }
             else
                 throw new Exception("Something wrong");
         }
 
-
-        #endregion
+        bool IsServiceLocator(InvocationExpressionSyntax node)
+        {
+            if (node.Expression is MemberAccessExpressionSyntax member &&
+                member.Expression is IdentifierNameSyntax className &&
+                member.Name is GenericNameSyntax genericMethod)
+            {
+                return className.Identifier.Text == "ServiceLocator" &&
+                    genericMethod.Identifier.Text == "Resolve";
+            }
+            return false;
+        }
     }
 }

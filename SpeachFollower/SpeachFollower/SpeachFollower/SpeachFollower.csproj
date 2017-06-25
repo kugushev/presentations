@@ -34,9 +34,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CodeFixProvider.cs" />
-    <Compile Include="DiagnosticAnalyzer.cs" />
-    <Compile Include="Fix\ParseText.cs" />
+    <Compile Include="Fix\RefactorForeach.cs" />
+    <Compile Include="Fix\RefactorIsServiceLocator.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="Fix\RefactorFixClassMethod.cs" />
+    <Compile Include="Fix\RefactorMethodFix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
