@@ -18,21 +18,5 @@ namespace Example
 
             return null;
         }
-
-        #region Fog of war
-
-        private static string ToCamelCase(SimpleNameSyntax s)
-            => char.ToLowerInvariant(s.Identifier.Text[0]) + s.Identifier.Text.Substring(1);
-
-        private static string ToFieldName(SimpleNameSyntax s)
-            => "_" + ToCamelCase(s);
-
-        private static ConstructorDeclarationSyntax GetSuitableCtor(ClassDeclarationSyntax cls)
-            => cls.Members
-            .OfType<ConstructorDeclarationSyntax>()
-            .OrderBy(c => c.ParameterList.Parameters.Count)
-            .FirstOrDefault();
-        
-        #endregion
     }
 }

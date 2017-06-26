@@ -35,13 +35,13 @@ namespace SpeachFollower.Fix
                     .WithLeadingTrivia(ElasticEndOfLine(Environment.NewLine)));
             });
             helper.Add("05. Create fixed class", "SyntaxNode fixedRoot = root.ReplaceNode(cls, fixedClass);");
-            helper.Add("18. Return fixed class", e =>
+            helper.Add("N. Return fixed class", e =>
             {
                 e.ReplaceNode(helper.Method.Body.Statements.Last(),
                     ParseStatement("return fixedRoot.ToFullString();").WithLeadingTrivia(ElasticEndOfLine(Environment.NewLine)));
             });
 
-            helper.Add("19. Return fixed class with normalized whitespaces", e =>
+            helper.Add("N+1. Return fixed class with normalized whitespaces", e =>
             {
                 e.ReplaceNode(helper.Method.Body.Statements.Last(),
                     ParseStatement("return fixedRoot.NormalizeWhitespace().ToFullString();").WithLeadingTrivia(ElasticEndOfLine(Environment.NewLine)));
