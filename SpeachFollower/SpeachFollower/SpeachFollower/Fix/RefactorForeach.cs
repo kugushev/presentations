@@ -39,6 +39,7 @@ namespace SpeachFollower.Fix
                     cls = cls.InsertNodesBefore(cls.Members.First(), new[]
                     {
                         SyntaxFactory.ConstructorDeclaration(cls.Identifier)
+                            .WithBody(SyntaxFactory.Block())
                             .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
                     });
                 }");

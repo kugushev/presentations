@@ -48,7 +48,8 @@ namespace ServiceLocatorKiller
                     cls = cls.InsertNodesBefore(cls.Members.First(), new[]
                     {
                         SyntaxFactory.ConstructorDeclaration(cls.Identifier)
-                            .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
+                        .WithBody(SyntaxFactory.Block())
+                        .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
                     });
                 }
 
