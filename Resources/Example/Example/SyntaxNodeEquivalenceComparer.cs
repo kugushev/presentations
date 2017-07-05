@@ -11,6 +11,6 @@ namespace Example
     {
         public bool Equals(SyntaxNode x, SyntaxNode y) => x?.IsEquivalentTo(y, true) == true;
 
-        public int GetHashCode(SyntaxNode obj) => obj?.GetType().GetHashCode() ?? 0;
+        public int GetHashCode(SyntaxNode obj) => 0;
     }
 }

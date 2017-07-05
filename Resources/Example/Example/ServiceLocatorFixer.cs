@@ -19,59 +19,21 @@ namespace Example
             ClassDeclarationSyntax cls = root.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
             SyntaxNode fixedClass = FixClass(cls);
             SyntaxNode fixedRoot = root.ReplaceNode(cls, fixedClass);
-            return fixedRoot.NormalizeWhitespace().ToFullString();
+            return fixedRoot.ToFullString();
         }
 
         SyntaxNode FixClass(ClassDeclarationSyntax cls)
         {
-
             var executions = cls.DescendantNodes().OfType<InvocationExpressionSyntax>()
                 .Where(IsServiceLocator);
-            cls = cls.ReplaceNodes(executions, (orig, same) => SyntaxFactory.IdentifierName("_" + GetFieldName(GetServiceType(same))));
 
             foreach (SimpleNameSyntax type in executions.Select(GetServiceType).Distinct(new SyntaxNodeEquivalenceComparer()))
             {
-                if (GetSuitableCtor(cls) == null)
-                {
-                    cls = cls.InsertNodesBefore(cls.Members.First(), new[]
-                    {
-                        SyntaxFactory.ConstructorDeclaration(cls.Identifier)
-                            .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
-                    });
-                }
 
-                string typeName = char.ToLowerInvariant(type.Identifier.Text[0]) + type.Identifier.Text.Substring(1);
-                string fieldName = "_" + typeName;
-                cls = cls.InsertNodesAfter(GetSuitableCtor(cls), new[]
-                {
-                        SyntaxFactory.FieldDeclaration(
-                            SyntaxFactory.VariableDeclaration(type).AddVariables(
-                                SyntaxFactory.VariableDeclarator(fieldName)))
-                });
-                var ctor = GetSuitableCtor(cls);
-                cls = cls.ReplaceNode(ctor, ctor
-                    .AddParameterListParameters(
-                        SyntaxFactory.Parameter(SyntaxFactory.Identifier(typeName)).WithType(type))
-                    .AddBodyStatements(
-                    SyntaxFactory.ExpressionStatement(
-                        SyntaxFactory.AssignmentExpression(
-                            SyntaxKind.SimpleAssignmentExpression,
-                            SyntaxFactory.IdentifierName(fieldName),
-                            SyntaxFactory.IdentifierName(typeName)))));
 
             }
 
             return cls;
-        }
-
-        string GetFieldName(SimpleNameSyntax type)
-        {
-            return char.ToLowerInvariant(type.Identifier.Text[0]) + type.Identifier.Text.Substring(1);
-        }
-
-        ConstructorDeclarationSyntax GetSuitableCtor(ClassDeclarationSyntax cls)
-        {
-            return cls.Members.OfType<ConstructorDeclarationSyntax>().OrderBy(c => c.ParameterList.Parameters.Count).FirstOrDefault();
         }
 
         SimpleNameSyntax GetServiceType(InvocationExpressionSyntax node)
