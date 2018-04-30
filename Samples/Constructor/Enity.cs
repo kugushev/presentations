@@ -17,7 +17,7 @@ namespace Samples.Constructor
 
         public Enity WithId(int id)
         {
-
+            return new Enity(id, Name);
         }
     }
 }
