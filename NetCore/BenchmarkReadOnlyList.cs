@@ -32,13 +32,16 @@ namespace NetCore
         [Benchmark]
         public object List_Add()
         {
-            return BigList.Append(42).ToList().AsReadOnly();
+            return BigList.Append(42)
+                .ToList()
+                .AsReadOnly();
         }
 
         [Benchmark]
-        public object ImmutablList_Add()
+        public object ImmutableList_Add()
         {
-            return BigImmutableList.Add(42);
+            return BigImmutableList
+                .Add(42);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]

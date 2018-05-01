@@ -35,24 +35,28 @@ namespace NetCore
         }
 
         [Benchmark]
-        public object ImmutablDictionary_Get()
+        public object ImmutableDictionary_Get()
         {
             return BigImmutable[42];
         }
 
         [Benchmark]
-        public void Dictianary_Set()
+        public object Dictianary_Set()
         {
-            var newDict = new Dictionary<int, string>(Big);
+            var newDict = 
+                new Dictionary<int, string>(Big);
             newDict[42] = "123";
             newDict.Add(Count + 1, "new");
+            return newDict;
         }
 
         [Benchmark]
-        public void ImmutablDictionary_Set()
+        public object ImmutableDictionary_Set()
         {
-            BigImmutable.SetItem(42, "123");
-            BigImmutable.Add(Count + 1, "new");
+            var newDict = BigImmutable
+                .SetItem(42, "123");
+            return newDict
+                .Add(Count + 1, "new");
         }
     }
 }

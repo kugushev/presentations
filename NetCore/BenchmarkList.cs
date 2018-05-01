@@ -32,7 +32,9 @@ namespace NetCore
         [Benchmark]
         public object List_Select()
         {
-            return BigList.Select(i => i.ToString()).ToList();
+            return BigList
+                .Select(i => i.ToString())
+                .ToList();
         }
 
 
@@ -44,13 +46,15 @@ namespace NetCore
 
 
         [Benchmark]
-        public object ImmutablList_Select()
+        public object ImmutableList_Select()
         {
-            return BigImmutableList.Select(i => i.ToString()).ToImmutableList();
+            return BigImmutableList
+                .Select(i => i.ToString())
+                .ToImmutableList();
         }
 
         [Benchmark]
-        public object ImmutablList_Convert()
+        public object ImmutableList_Convert()
         {
             return BigImmutableList.ConvertAll(i => i.ToString());
         }
@@ -58,7 +62,9 @@ namespace NetCore
         [Benchmark]
         public object List_Where()
         {
-            return BigList.Where(i => i < 100).ToList();
+            return BigList
+                .Where(i => i < 100)
+                .ToList();
         }
 
         [Benchmark]
@@ -68,13 +74,15 @@ namespace NetCore
         }
 
         [Benchmark]
-        public object ImmutablList_Where()
+        public object ImmutablsList_Where()
         {
-            return BigImmutableList.Where(i => i < 100).ToImmutableList();
+            return BigImmutableList
+                .Where(i => i < 100)
+                .ToImmutableList();
         }
 
         [Benchmark]
-        public object ImmutablList_FindAll()
+        public object ImmutablsList_FindAll()
         {
             return BigImmutableList.FindAll(i => i < 100);
         }
@@ -92,13 +100,13 @@ namespace NetCore
         }
 
         [Benchmark]
-        public object ImmutablList_TakeSkip()
+        public object ImmutableList_TakeSkip()
         {
             return BigImmutableList.Skip(Count / 2).Take(Count / 4).ToImmutableList();
         }
 
         [Benchmark]
-        public object ImmutablList_GetRange()
+        public object ImmutableList_GetRange()
         {
             return BigImmutableList.GetRange(Count / 2, Count / 4);
         }
@@ -112,12 +120,11 @@ namespace NetCore
 
 
         [Benchmark]
-        public object ImmutablList_Sort()
+        public object ImmutableList_Sort()
         {
             return BigImmutableList.Sort();
         }
 
-        /*
         [Benchmark]
         public void List_Add()
         {
@@ -127,7 +134,7 @@ namespace NetCore
         }
 
         [Benchmark]
-        public void ImmutablList_Add()
+        public void ImmutableList_Add()
         {
             var list = ImmutableList.Create<int>();
             for (int i = 0; i < Count; i++)
@@ -161,7 +168,6 @@ namespace NetCore
             for (int i = 0; i < Count; i++)
                 Spike(BigImmutableList[i]);
         }
-        */
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         private void Spike(int i)

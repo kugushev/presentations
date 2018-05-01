@@ -8,6 +8,8 @@ namespace NetCore
         static void Main(string[] args)
         {
             RunBench<BenchmarkReadOnlyList>();
+            RunBench<BenchmarkList>();
+            RunBench<BenchmarkDictionary>();
             Console.ReadLine();
         }
 

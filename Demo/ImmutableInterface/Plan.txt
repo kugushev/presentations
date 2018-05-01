@@ -1,17 +1,2 @@
-﻿Show Car. 
-Two entity states. 
-Maybe you have a question why List<IOwner>?
-Show Car Factory. 
-Explain different states.
-Show ICarService. "All members should work only with immutable state of an entity"
-...
-Go to controller
-Show POST test
-...
-Show DbCotext
-...
-Go to controller
-Show repository
-...
-Go to Repository
+﻿
 
