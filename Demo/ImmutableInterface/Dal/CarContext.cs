@@ -8,6 +8,6 @@ namespace Demo.ImmutableInterface.Dal
 {
     internal class CarContext : DbContext
     {
-        internal DbSet<Car> Cars { get; set; }
+        public DbSet<Car> Cars { get; set; }
     }
 }
