@@ -21,7 +21,6 @@ namespace Demo.ImmutableInterface.BusinessLogic
 
         public string Certificate { get; set; }
 
-        public List<Owner> Owners { get; set; }
-        IReadOnlyList<IOwner> ICar.Owners => Owners;
+        public IReadOnlyList<IOwner> Owners { get; set; }
     }
 }
