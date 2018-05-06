@@ -35,8 +35,6 @@ namespace Samples.ImmutableInterface
         int Id { get; }
 
         IReadOnlyCollection<IEntity> Children { get; }
-
-        //ISuperEntity With(Action<SuperEntityImpl> builder);
     }
 
     public class SuperEntityImpl : ISuperEntity
@@ -46,10 +44,5 @@ namespace Samples.ImmutableInterface
         public List<Entity> Children { get; set; }
 
         IReadOnlyCollection<IEntity> ISuperEntity.Children => Children;
-
-        //public ISuperEntity WithId(int id)
-        //{
-            
-        //}
     }
 }

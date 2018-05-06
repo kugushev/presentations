@@ -22,10 +22,7 @@ namespace Demo.ImmutableInterface.BusinessLogic
                 IssueDate = issueDate,
                 Certificate = certificate
             };
-
-            IOwner owner = carService.SellCar(car);
-            car.Owners = new[] { owner };
-
+            
             return car;
         }
     }
