@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Demo.Other
+namespace Samples.ImmutableInterface
 {
-    public interface IOwner
+    public interface IBicycle
     {
+        int Id { get; }
+
         string Name { get; }
     }
-    public class Owner : IOwner
+
+    public class Bicycle : IBicycle
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
     }
-    
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Demo.Other;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,17 +7,19 @@ namespace Samples.WithBuilder
 {
     interface IEntity
     {
-        AnotherEntity Agg { get; }
-        IEntity With(Action<Entity> builder);
+        IOwner CurrentOwner { get; }
+        IEntity With(Action<Car> builder);
     }
 
-    class Entity : IEntity
+    class Car : IEntity
     {
-        public AnotherEntity Agg { get; set; }
+        IOwner IEntity.CurrentOwner => CurrentOwner;
 
-        public IEntity With(Action<Entity> builder)
+        public Owner CurrentOwner { get; set; }
+        
+        public IEntity With(Action<Car> builder)
         {
-            var clone = (Entity)MemberwiseClone();
+            var clone = (Car)MemberwiseClone();
             builder(clone);
             return clone;
         }

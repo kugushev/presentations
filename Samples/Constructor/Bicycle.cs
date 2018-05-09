@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Samples.Constructor
 {
-    class Enity
+    class Bicycle
     {
-        public Enity(int id, string name)
+        public Bicycle(int id, string name)
         {
             Id = id;
             Name = name;
@@ -14,10 +14,5 @@ namespace Samples.Constructor
 
         public int Id { get; }
         public string Name { get; }
-
-        public Enity WithId(int id)
-        {
-            return new Enity(id, Name);
-        }
     }
 }

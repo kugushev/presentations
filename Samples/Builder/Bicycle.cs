@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Samples.Builder
 {
-    class Enity
+    class Bicycle
     {
-        public Enity(Builder builder)
+        public Bicycle(Builder builder)
         {
             Id = builder.Id;
             Name = builder.Name;

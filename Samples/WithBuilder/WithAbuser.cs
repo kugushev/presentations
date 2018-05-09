@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Demo.Other;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
@@ -7,18 +8,21 @@ namespace Samples.WithBuilder
 {
     class WithAbuser
     {
-        void DoSomething()
+        void Test_SellCar()
         {
-            IEntity entity = new Entity
+            IEntity entity = new Car
             {
-                Agg = new AnotherEntity
+                CurrentOwner = new Owner
                 {
-                    Name = "old value"
+                    Name = "Aleksandr Kugushev"
                 }
-            };            
-            IEntity newValue = entity
-                .With(e => e.Agg.Name = "new value");
-            Assert.Equal("old value", entity.Agg.Name);
+            };
+            IEntity newValue = entity.With(e 
+                => e.CurrentOwner.Name = "Jon Skeet");
+
+            Assert.Equal(
+                "Aleksandr Kugushev", 
+                entity.CurrentOwner.Name);
         }
     }
 }
