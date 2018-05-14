@@ -14,21 +14,23 @@ namespace Samples.Why
 
             /* a lot of code */
 
-            return LoadResult(name);
+            return LoadResult(name, name == entity.Name);
         }
 
-        string GetEntityName(Entity entity)
+        public string GetEntityName(Entity entity)
         {
+            string name = entity.Name;
             /* a lot of code */
 
+            // Bugfix 666
             entity.Name = $"Name: {entity.Name}";
 
             /* a lot of code */
 
-            return entity.Name;
+            return name;
         }
 
-        Result LoadResult(string name) { return new Result(); }
+        Result LoadResult(string name, bool isEqual) { return new Result(); }
     }
 
     public class Entity

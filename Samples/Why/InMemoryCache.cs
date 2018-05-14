@@ -6,22 +6,19 @@ namespace Samples.Why
 {
     class InMemoryCache
     {
-        private static readonly Cache cache;
-        void DoSomething()
+        private readonly Dictionary<int, Entity> cache = new Dictionary<int, Entity>();
+        void DoSomething(int id)
         {
             /* a lot of code */
 
-            var entity = cache.Cached(GetEntity);
+            if (!cache.TryGetValue(id, out var entity))
+                entity = cache[id] = GetEntity(id);
 
             /* a lot of code */
-
+            //Bugfix 1313
             entity.Name = "Hello World!";
         }
-        Entity GetEntity()
-        { 
-            /*---*/
-            return null;
-        }
+        Entity GetEntity(int id) { /*---*/ return null; }
     }
 
     class Cache
