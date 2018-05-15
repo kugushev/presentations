@@ -11,7 +11,7 @@ namespace Samples.ImmutableInterface
         [Fact]
         public void Example()
         {
-            var super = new SuperEntityImpl
+            var super = new MyCar
             {
                 Id = 42,
                 Children = new List<Bicycle>
