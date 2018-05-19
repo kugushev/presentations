@@ -16,7 +16,7 @@ namespace Demo.ImmutableInterface.BusinessLogic
                 IssueDate = issueDate,
                 Certificate = certificate
             };
-            
+
             return car;
         }
     }
