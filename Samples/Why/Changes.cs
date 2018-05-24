@@ -14,7 +14,7 @@ namespace Samples.Why
 
             /* a lot of code */
 
-            return LoadResult(name, name == entity.Name);
+            return LoadResult(name, entity.Value);
         }
 
         public string GetEntityName(Entity entity)
@@ -23,20 +23,21 @@ namespace Samples.Why
             /* a lot of code */
 
             // Bugfix 666
-            entity.Name = $"Name: {entity.Name}";
+            entity.Value = 42;
 
             /* a lot of code */
 
             return name;
         }
 
-        Result LoadResult(string name, bool isEqual) { return new Result(); }
+        Result LoadResult(string name, int value) { return new Result(); }
     }
 
     public class Entity
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int Value { get; set; }
     }
 
     class Result { }

@@ -5,23 +5,33 @@ using System.Text;
 
 namespace Samples.WithBuilder
 {
-    interface IEntity
+    interface ICar
     {
         IOwner CurrentOwner { get; }
-        IEntity With(Action<Car> builder);
+        string Model { get; }
+        ICar With(Action<Car> builder);
     }
 
-    class Car : IEntity
+    class Car : ICar
     {
-        IOwner IEntity.CurrentOwner => CurrentOwner;
+        IOwner ICar.CurrentOwner => CurrentOwner;
+
+        public string Model { get; set; }
 
         public Owner CurrentOwner { get; set; }
-        
-        public IEntity With(Action<Car> builder)
+
+        public ICar With(Action<Car> builder)
         {
             var clone = (Car)MemberwiseClone();
             builder(clone);
             return clone;
+        }
+
+        ICar ChangeModel(ICar car)
+        {
+            ICar newCar = car.With(
+                c => c.Model = "Hyundai Solaris");
+            return newCar;
         }
     }
 }

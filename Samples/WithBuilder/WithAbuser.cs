@@ -11,14 +11,14 @@ namespace Samples.WithBuilder
         [Fact]
         void Test_SellCar()
         {
-            IEntity entity = new Car
+            ICar entity = new Car
             {
                 CurrentOwner = new Owner
                 {
                     Name = "Aleksandr Kugushev"
                 }
             };
-            IEntity newValue = entity.With(e
+            ICar newValue = entity.With(e
                 => e.CurrentOwner.Name = "Jon Skeet");
 
             Assert.Equal(

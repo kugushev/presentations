@@ -1,8 +1,10 @@
-﻿using System;
+﻿using ImmutableNet;
+using Samples.Why;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Samples.Wrapper
+namespace Samples.WrapperMy
 {
     class Enity
     {
@@ -10,17 +12,17 @@ namespace Samples.Wrapper
         public string Name { get; set; }
     }
 
-    class Wrapper<T>
+    class Immutable<T>
     {
         private readonly T entity;
 
-        public Wrapper(T entity)
+        public Immutable(T entity)
         {
             this.entity = entity;
         }
 
         public V Get<V>(Func<T, V> getter) => getter(entity);
-        public T With(Action<T> builder)
+        public T Modify(Action<T> builder)
         {
             var result = Clone();
             builder(result);
@@ -32,4 +34,6 @@ namespace Samples.Wrapper
             throw new NotImplementedException();
         }
     }
+
+
 }
