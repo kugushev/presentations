@@ -38,7 +38,6 @@ namespace Demo.ImmutableInterface.Presentation
 {
 	""model"": ""Kia Rio"",
     ""issueDate"": ""2015.12.1"",
-	""certificate"": ""ABCD12345"",
 	""owners"": [{
 		""name"": ""Aleksandr Kugushev""
     }]

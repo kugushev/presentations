@@ -6,8 +6,9 @@ using Xunit;
 
 namespace Samples.WithBuilder
 {
-    class WithAbuser
+    public class WithAbuser
     {
+        [Fact]
         void Test_SellCar()
         {
             IEntity entity = new Car
@@ -17,11 +18,11 @@ namespace Samples.WithBuilder
                     Name = "Aleksandr Kugushev"
                 }
             };
-            IEntity newValue = entity.With(e 
+            IEntity newValue = entity.With(e
                 => e.CurrentOwner.Name = "Jon Skeet");
 
             Assert.Equal(
-                "Aleksandr Kugushev", 
+                "Aleksandr Kugushev",
                 entity.CurrentOwner.Name);
         }
     }

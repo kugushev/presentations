@@ -7,14 +7,8 @@ namespace Demo.ImmutableInterface.BusinessLogic
 {
     class CarFactory
     {
-        private readonly ICarService carService;
-        public CarFactory(ICarService carService)
-        {
-            this.carService = carService;
-        }
-
         public ICar CreateCar(string model, DateTime issueDate, 
-            string certificate)
+            int certificate)
         {
             var car = new Car
             {
@@ -22,7 +16,7 @@ namespace Demo.ImmutableInterface.BusinessLogic
                 IssueDate = issueDate,
                 Certificate = certificate
             };
-            
+
             return car;
         }
     }
