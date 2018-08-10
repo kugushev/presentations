@@ -3,7 +3,7 @@
  
  https://alex-aka-jj.livejournal.com/66984.html
  
-
+https://stackoverflow.com/questions/334779/is-there-a-difference-between-tdd-and-test-first-development-or-test-first-prog
 
 elasticsearch как альтернатива NoTest
 маяник негатив позитив на каждый топик
