@@ -1,0 +1,14 @@
+Default Interface Methods
+Nullable reference type
+Recursive patterns
+Async streams
+Caller expression attribute
+Target-typed new
+Pattern-based using
+Generic attributes
+Ranges
+Default in deconstruction
+Relax ordering of ref and partial modifiers
+Null Coalescing Assignment
+Alternative interpolated verbatim strings
+stackalloc in nested contexts
