@@ -3,18 +3,18 @@ Nullable reference type
 	generics
 	check DQT solution
 	array of not null strings
-Positional patterns
-	проверить как на текущей версии работают tuple pattern
+Recursive patterns
+	+проверить как на текущей версии работают tuple pattern
 	+указать, что DEsconstruct может быть extention method, i.e. использовать pattern matching для типов, к которым нет доступа, например string (length, encoding)
-	поддержвиет Dog(name: "Kai"...
+	-поддержвиет Dog(name: "Kai"...
 	+Вложенный pattern можно опусить Employee(_, _, ("Stratec", _, _))
 	+Property Pattern для больших, Positional pattern для маленьких
 	+монада optional
-	+Positional Pattern не требует Deconstruct
-		
-Recursive patterns
-Async streams
-Caller expression attribute
+	+Positional Pattern не требует Deconstruct			
+Ranges
+	-Enumerable.Ranges
+	+не не просто, это ж слайсы, теперь можно окончательно троить питонистов
+	-span and string.Join
 Target-typed new
 	+Круто, когда нельзя использовать var (параметры)
 	+Круто, когда конструктор большой
@@ -22,11 +22,11 @@ Target-typed new
 	+Работает с return
 	+Шутка про войну var vs new()
 	+Не работает с дефортным конструктором для структур
+	
+Async streams
+Caller expression attribute
 Pattern-based using
 Generic attributes
-Ranges
-	Enumerable.Ranges
-	не не просто, это ж слайсы, теперь можно окончательно троить питонистов
 Default in deconstruction
 Relax ordering of ref and partial modifiers
 Null Coalescing Assignment
