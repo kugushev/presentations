@@ -1,5 +1,17 @@
 Default Interface Methods
 Nullable reference type
+	generics
+	check DQT solution
+	array of not null strings
+Positional patterns
+	проверить как на текущей версии работают tuple pattern
+	+указать, что DEsconstruct может быть extention method, i.e. использовать pattern matching для типов, к которым нет доступа, например string (length, encoding)
+	поддержвиет Dog(name: "Kai"...
+	+Вложенный pattern можно опусить Employee(_, _, ("Stratec", _, _))
+	+Property Pattern для больших, Positional pattern для маленьких
+	+монада optional
+	+Positional Pattern не требует Deconstruct
+		
 Recursive patterns
 Async streams
 Caller expression attribute
@@ -13,6 +25,8 @@ Target-typed new
 Pattern-based using
 Generic attributes
 Ranges
+	Enumerable.Ranges
+	не не просто, это ж слайсы, теперь можно окончательно троить питонистов
 Default in deconstruction
 Relax ordering of ref and partial modifiers
 Null Coalescing Assignment

@@ -51,15 +51,15 @@ public class C {
     }
 }
 
-class Company{
-    public Company(Dictionary<int, List<(string name, int age)>> users){
+class Store{
+    public Store(Dictionary<int, List<(string name, int age)>> users){
         Users = users ?? new();
     }   
     public Dictionary<int, List<(string name, int age)>> Users { get;}
 }
 
-class Company1{
-    public Company(Dictionary<int, List<(string name, int age)>> users){
+class Store1{
+    public Store1(Dictionary<int, List<(string name, int age)>> users){
         Users = users ?? new Dictionary<int, List<(string name, int age)>>();
     }   
     public Dictionary<int, List<(string name, int age)>> Users { get;}
