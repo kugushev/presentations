@@ -4,6 +4,12 @@ Recursive patterns
 Async streams
 Caller expression attribute
 Target-typed new
+	+Круто, когда нельзя использовать var (параметры)
+	+Круто, когда конструктор большой
+	+Круто, обратить внимание на anonimout type
+	+Работает с return
+	+Шутка про войну var vs new()
+	+Не работает с дефортным конструктором для структур
 Pattern-based using
 Generic attributes
 Ranges
