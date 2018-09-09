@@ -1,4 +1,3 @@
-Default Interface Methods
 Nullable reference type
 	generics
 	check DQT solution
@@ -22,6 +21,10 @@ Target-typed new
 	+Работает с return
 	+Шутка про войну var vs new()
 	+Не работает с дефортным конструктором для структур
+Default Interface Methods
+	Обратная совместимость
+	Чистые функции в доменных сущностях (многие предпочитают использовтаь интерфесы вместо доменных сущностей(
+	trait в scala: в любой непонятной ситуации - используй trait
 	
 Async streams
 Caller expression attribute

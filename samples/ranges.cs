@@ -12,6 +12,8 @@ public class Program
         // test
         TestIntex(array);
         TestRange(array);
+        TestString();
+        LogsSubstring();
     }
 
     static void TestIntex(int[] array)
@@ -33,10 +35,30 @@ public class Program
         Print(array[..3]); // out: 1, 2, 3
         Print(array[..^3]); // out: 1, 2, 3, 4, 5, 6
         Print(array[5..^0]); // out: 6, 7, 8, 9
+        Print(array[..]); // out: 1, 2, 3, 4, 5, 6, 7, 8, 9
+    }
+
+    static void LogsSubstring(){
+        const string log = "2018.09.01 Errors: #1234 Null Reference #1456 Access Violation @End";
+        
+        string errors = log[20..^4]; // out: 1234 Null Reference #1456 Access Violation
+        foreach (var error in errors.Split('#'))
+        {   
+            string details = error[4..]; 
+            // out: Null Reference
+            // out: Access Violation
+            Console.WriteLine(details);
+        }
+    }
+    
+    static void TestString()
+    {
+        string substring = "Hello World"[..5]; // out: Hello       
+        Console.WriteLine(substring);
     }
 
     static void Print(Span<int> span)
-        => Console.WriteLine(String.Join(", ", span.ToArray()));
+        => Console.WriteLine(String.Join(", ", span.ToArray()));    
 }
 
 // More information at https://github.com/dotnet/csharplang/wiki/vNext-Preview

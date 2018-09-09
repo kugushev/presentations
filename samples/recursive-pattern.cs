@@ -91,6 +91,26 @@ public class Program {
             Console.WriteLine(img.Name);
     }
 
+    void UglyCode(){
+        object image = new Image {
+            Name = "Черный квадрат",
+            Author = "Малевич",
+            Shape = new Square {
+                Color = "black",
+                Size = 80
+            }
+        };
+
+        switch(image){
+            case Image(String(14), String(7), (String(12), 80)) img:
+                Console.WriteLine(img.Name);
+                break;
+            case Image(_, _, (_, 80)) img:
+                Console.WriteLine(img.Name);
+                break;
+        }
+    }
+
     static Image[] GetImages(){
         return new[] {
             new Image {
