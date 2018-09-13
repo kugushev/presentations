@@ -1,7 +1,7 @@
 Nullable reference type
-	generics
-	check DQT solution
-	array of not null strings
+	+generics
+	-check DQT solution
+	-array of not null strings
 Recursive patterns
 	+проверить как на текущей версии работают tuple pattern
 	+указать, что DEsconstruct может быть extention method, i.e. использовать pattern matching для типов, к которым нет доступа, например string (length, encoding)
