@@ -50,7 +50,9 @@ public void Find_ExistsButNoPermissions_ReturnsEmpty();
 legacy.Legacy();
 legacy1= legacy.Legacy + legacyLegacy;
 legacy1.Legacy(le, ga, cy);
-legacy
+
+//legacy.CATabilityLevel = 42;
+
 legacy42 = legacy
     .Where(l => l.IsLeagacy)
     .Select(l => l.Legacy);
