@@ -1,0 +1,39 @@
+Nullable reference type
+	+generics
+	-check DQT solution
+	-array of not null strings
+Recursive patterns
+	+проверить как на текущей версии работают tuple pattern
+	+указать, что DEsconstruct может быть extention method, i.e. использовать pattern matching для типов, к которым нет доступа, например string (length, encoding)
+	-поддержвиет Dog(name: "Kai"...
+	+Вложенный pattern можно опусить Employee(_, _, ("Stratec", _, _))
+	+Property Pattern для больших, Positional pattern для маленьких
+	+монада optional
+	+Positional Pattern не требует Deconstruct			
+Ranges
+	-Enumerable.Ranges
+	+не не просто, это ж слайсы, теперь можно окончательно троить питонистов
+	-span and string.Join
+Target-typed new
+	+Круто, когда нельзя использовать var (параметры)
+	+Круто, когда конструктор большой
+	+Круто, обратить внимание на anonimout type
+	+Работает с return
+	+Шутка про войну var vs new()
+	+Не работает с дефортным конструктором для структур
+Default Interface Methods
+	+Обратная совместимость
+	+Чистые функции в доменных сущностях (многие предпочитают использовтаь интерфесы вместо доменных сущностей(
+	+trait в scala: в любой непонятной ситуации - используй trait
+	+только для интерфейсов, но не для классов
+	+static members
+	
+Async streams
+Caller expression attribute
+Pattern-based using
+Generic attributes
+Default in deconstruction
+Relax ordering of ref and partial modifiers
+Null Coalescing Assignment
+Alternative interpolated verbatim strings
+stackalloc in nested contexts
