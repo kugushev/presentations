@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.25618.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doq", "Doq\Doq.csproj", "{66F2A74A-EB18-451B-BE56-4A0094B6BC5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleTests", "SampleTests\SampleTests.csproj", "{BFF2BA99-5076-4193-9208-AE93F408C5B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDomainLayer", "SampleDomainLayer\SampleDomainLayer.csproj", "{3698A918-31F4-4770-8922-C8E5BFB7141B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{66F2A74A-EB18-451B-BE56-4A0094B6BC5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66F2A74A-EB18-451B-BE56-4A0094B6BC5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66F2A74A-EB18-451B-BE56-4A0094B6BC5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66F2A74A-EB18-451B-BE56-4A0094B6BC5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFF2BA99-5076-4193-9208-AE93F408C5B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFF2BA99-5076-4193-9208-AE93F408C5B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFF2BA99-5076-4193-9208-AE93F408C5B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFF2BA99-5076-4193-9208-AE93F408C5B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3698A918-31F4-4770-8922-C8E5BFB7141B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3698A918-31F4-4770-8922-C8E5BFB7141B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3698A918-31F4-4770-8922-C8E5BFB7141B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3698A918-31F4-4770-8922-C8E5BFB7141B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
