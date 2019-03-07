@@ -13,8 +13,8 @@ namespace MutantsCatalogue.Application.Controllers
         private const string Wolverine = "Wolverine";
         private const string Magneto = "Magneto";
         
-        [HttpPost]
-        public ActionResult<string> PostCombat([FromQuery] string attacker, [FromQuery] string defender)
+        [HttpGet("result")]
+        public ActionResult<string> GetCombatResult([FromQuery] string attacker, [FromQuery] string defender)
         {
             // todo: move all logic to domain
             var mutants = new[] {attacker, defender};
@@ -27,7 +27,7 @@ namespace MutantsCatalogue.Application.Controllers
             return "don't know";
         }
 
-        [HttpPost("epic")]
+        [HttpPost("result/epic")]
         public ActionResult<string> PostEpicCombat([FromQuery] string attacker, [FromQuery] string defender)
         {
             throw new NotImplementedException();
