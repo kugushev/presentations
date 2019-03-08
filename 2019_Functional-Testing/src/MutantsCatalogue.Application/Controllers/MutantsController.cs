@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MutantsCatalogue.Domain.Mutants;
 
 namespace MutantsCatalogue.Application.Controllers
 {
@@ -6,19 +7,27 @@ namespace MutantsCatalogue.Application.Controllers
     [ApiController]
     public class MutantsController : ControllerBase
     {
+        private readonly IMutantsService mutantsService;
+
+        public MutantsController(IMutantsService mutantsService)
+        {
+            this.mutantsService = mutantsService;
+        }
         
         [HttpGet("{name}")]
-        public IActionResult Get(string name)
+        public ActionResult<Mutant> Get(string name)
         {
-            return Ok(new
-            {
-                Name = name
-            });
+            var mutant = mutantsService.Retrieve(name);
+            if (mutant != null)
+                return mutant;
+
+            return NotFound();
         }
 
-        [HttpPut("{name}")]
-        public ActionResult Put([FromBody] object mutant)
+        [HttpPost()]
+        public ActionResult Post([FromBody] Mutant mutant)
         {
+            mutantsService.Add(mutant);
             return Ok();
         }
         
