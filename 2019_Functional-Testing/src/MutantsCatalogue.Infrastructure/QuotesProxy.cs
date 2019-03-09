@@ -17,13 +17,16 @@ namespace MutantsCatalogue.Infrastructure
         
         public async Task<string> GetQuoteAsync(string category)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get,"https://quotes.rest/qod");
-            request.Headers.Add("Accept", "application/json");
+            string url = "https://quotes.rest/qod";
 
             if (category != null)
-                request.Properties.Add("category", category);
+                url = $"{url}?category={category}";
+
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("Accept", "application/json");
+
                 
-            var client = clientFactory.CreateClient();
+            HttpClient client = clientFactory.CreateClient();
 
             var response = await client.SendAsync(request);
 

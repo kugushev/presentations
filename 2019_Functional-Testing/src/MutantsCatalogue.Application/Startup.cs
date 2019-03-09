@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,28 +30,37 @@ namespace MutantsCatalogue.Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);            
-            
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info
-                {
-                    Title = Configuration.GetValue<string>("Api:Name"), 
-                    Version = Configuration.GetValue<string>("Api:Version"),
-                });
-            });
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpClient();
+            ConfigureUtilityServices(services);
 
             ConfigureSettings(services);
-
-
+            
             services.AddDomain();
             services.AddDal();
             services.AddInfrastructure();
         }
 
+        protected virtual void ConfigureUtilityServices(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = Configuration.GetValue<string>("Api:Name"),
+                    Version = Configuration.GetValue<string>("Api:Version"),
+                });
+            });
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            ConfigureUtilityMiddlewares(app, env);
+            app.UseMvc();
+        }
+
+        protected virtual void ConfigureUtilityMiddlewares(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -61,7 +71,7 @@ namespace MutantsCatalogue.Application
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -69,7 +79,6 @@ namespace MutantsCatalogue.Application
             });
 
             app.UseHttpsRedirection();
-            app.UseMvc();
         }
 
         private void ConfigureSettings(IServiceCollection services)

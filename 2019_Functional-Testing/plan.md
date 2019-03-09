@@ -34,7 +34,6 @@
     - Для этого у нас есть WebApplicationFactory, которой можно скормить Startup.cs
         - Обратите внимание, что все что вы делаете в Program.cs тут не будет отражено
         - Для более сложных случаев нам стоит использовать наследника
-        - В appSettings.json мы определяем deployment agnostic данные. Только при таком деплое его не будет видно. Решение - builder.UseContentRoot(".")
         - Что бы переопределить appSettings.Development.json, мы добавляем builder.ConfigureAppConfiguration(b => b.AddInMemoryCollection(FakeConfig));
     - Что делать с AddAuthentification middleware?
         - Пронаследуемся от Startup.cs и сделаем override определенного метода. Использовать Google OAuth

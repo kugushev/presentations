@@ -3,15 +3,14 @@ using MutantsCatalogue.Domain.Mutants;
 
 namespace MutantsCatalogue.Dal
 {
-    internal class MutantsContext: DbContext
+    public class MutantsContext : DbContext
     {
-        public DbSet<Mutant> Mutants { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public MutantsContext(DbContextOptions options) : base(options)
         {
-            optionsBuilder.UseSqlite("Data Source=mutants.db");
         }
 
+        public DbSet<Mutant> Mutants { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Mutant>().HasKey(m => m.Name);

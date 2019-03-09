@@ -25,8 +25,8 @@ namespace MutantsCatalogue.Application.Controllers
             return await combatService.ExecuteCombatAsync(new[] {attacker, defender}, false);
         }
 
-        [HttpPost("epic")]
-        public async Task<ActionResult<CombatResult>> PostEpicCombat([FromQuery] string attacker, [FromQuery] string defender)
+        [HttpGet("epic")]
+        public async Task<ActionResult<CombatResult>> GetEpicCombat([FromQuery] string attacker, [FromQuery] string defender)
         {
             return await combatService.ExecuteCombatAsync(new[] {attacker, defender}, true);
         }

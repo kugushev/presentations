@@ -20,7 +20,7 @@ namespace MutantsCatalogue.Tests.Functional
         }
 
         [Fact]
-        public async Task Combat_MagnetoVsWolverine_MagnetoWins()
+        public async Task Combat_0001_MagnetoVsWolverine_MagnetoWins()
         {
             // arrange
             var client = factory.CreateClient();
