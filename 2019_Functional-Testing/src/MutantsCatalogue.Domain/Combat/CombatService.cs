@@ -10,21 +10,26 @@ namespace MutantsCatalogue.Domain.Combat
         private const string Magneto = "Magneto";
         
         private readonly IQuotesProxy quotesProxy;
+        private readonly DomainSettings settings;
 
-        public CombatService(IQuotesProxy quotesProxy)
+        public CombatService(IQuotesProxy quotesProxy, DomainSettings settings)
         {
             this.quotesProxy = quotesProxy;
+            this.settings = settings;
         }
 
         public async Task<CombatResult> ExecuteCombatAsync(IReadOnlyCollection<string> mutants, bool epic)
         {
-            var result = new CombatResult();
+            var result = new CombatResult
+            {
+                Copyright = $"{settings.Copyright} {settings.CopyrightYear}"
+            };
             if (mutants.Contains(Wolverine) && mutants.Contains(Magneto))
                 result.Winner = Magneto;
             else if (mutants.Contains(Wolverine))
                 result.Winner = Wolverine;
             else
-                return new CombatResult { Winner = "Unknown" };
+                result.Winner = "Unknown";
 
             if (epic)
             {

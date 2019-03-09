@@ -29,7 +29,7 @@ namespace MutantsCatalogue.Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);            
             
             services.AddSwaggerGen(c =>
             {
@@ -40,7 +40,10 @@ namespace MutantsCatalogue.Application
                 });
             });
             services.AddHttpClient();
-            
+
+            ConfigureSettings(services);
+
+
             services.AddDomain();
             services.AddDal();
             services.AddInfrastructure();
@@ -67,6 +70,14 @@ namespace MutantsCatalogue.Application
 
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+
+        private void ConfigureSettings(IServiceCollection services)
+        {
+            var settings = new DomainSettings(
+                Configuration.GetValue<string>("Domain:Copyright"),
+                Configuration.GetValue<string>("Domain:CopyrightYear"));
+            services.AddSingleton(settings);
         }
     }
 }

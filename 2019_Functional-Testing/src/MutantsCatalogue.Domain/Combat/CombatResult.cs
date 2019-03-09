@@ -4,5 +4,6 @@ namespace MutantsCatalogue.Domain.Combat
     {
         public string Winner { get; set; }
         public string VictoryPhrase { get; set; }
+        public string Copyright { get; set; }
     }
 }
