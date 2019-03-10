@@ -7,5 +7,7 @@ namespace MutantsCatalogue.Domain.Mutants
         public string Name { get; set; }
         public string RealName { get; set; }
         public string Superpower { get; set; }
+
+        public override string ToString() => $"{Name} ({RealName}): {Superpower}";
     }
 }
