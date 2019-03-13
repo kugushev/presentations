@@ -25,13 +25,13 @@ namespace MutantsCatalogue.Tests.Functional.Behaviors
         }
 
         [Scenario]
-        public void GetMutant_0003_Wolverine(DbContextOptions<MutantsContext> options, WebApplicationFactory<TestStartup> currentfactory, 
+        public void Scenario_GetMutant_0003_Wolverine(DbContextOptions<MutantsContext> options, WebApplicationFactory<TestStartup> currentfactory, 
             HttpResponseMessage response)
         {
             $"Given database".x(() =>
             {
                 options = new DbContextOptionsBuilder<MutantsContext>()
-                .UseInMemoryDatabase(databaseName: nameof(GetMutant_0003_Wolverine))
+                .UseInMemoryDatabase(databaseName: nameof(Scenario_GetMutant_0003_Wolverine))
                 .Options;
             });
 
@@ -52,9 +52,9 @@ namespace MutantsCatalogue.Tests.Functional.Behaviors
                     .WithWebHostBuilder(builder => builder.ConfigureTestServices(
                         services => services.AddSingleton(new MutantsContext(options))));
             });
-
-            const string url = "api/mutants/Wolverine";
-            $"When GET {url}".x(async () => response = await currentfactory.CreateClient().GetAsync(url));
+                        
+            $"When get mutant by name Wolverine"
+                .x(async () => response = await currentfactory.CreateClient().GetAsync("api/mutants/Wolverine"));
 
             "Then returns the mutant Wolverine (Logan): Invulnerability, Claws"
                 .x(async () =>

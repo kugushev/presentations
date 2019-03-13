@@ -20,10 +20,10 @@ namespace MutantsCatalogue.Tests.Functional.Behaviors
         }
 
         [Scenario]
-        public void Combat_0001_MagnetoVsWolverine_MagnetoWins(HttpResponseMessage response)
-        {
-            const string url = "api/combat?attacker=Magneto&defender=Wolverine";
-            $"When GET {url}".x(async () => response = await factory.CreateClient().GetAsync(url));
+        public void Scenario_Combat_0001_MagnetoVsWolverine_MagnetoWins(HttpResponseMessage response)
+        {            
+            $"When combat between Magneto and Wolverine"
+                .x(async () => response = await factory.CreateClient().GetAsync("api/combat?attacker=Magneto&defender=Wolverine"));
             
             "Then winner is Magneto".x(async () =>
             {

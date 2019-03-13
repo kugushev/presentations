@@ -75,17 +75,11 @@ namespace MutantsCatalogue.Tests.Functional
         {
             // arrange
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When(HttpMethod.Get, "https://quotes.rest/qod")
+            mockHttp.Expect(HttpMethod.Get, "https://quotes.rest/qod")
                 .WithQueryString("category", "life")
-                .Respond("application/json", @"{
-  'contents': {
-    'quotes': [
-      {
-        'quote': 'Life is life'
-      }
-    ]
-  }
-}");
+                .Respond("application/json", @"{'contents':{'quotes':[{'quote':'Life is life'}]}}");
+
+
             var httpClientfactory = Substitute.For<IHttpClientFactory>();
             httpClientfactory.CreateClient(Arg.Any<string>()).Returns(mockHttp.ToHttpClient());
             var currentfactory = factory
@@ -97,10 +91,8 @@ namespace MutantsCatalogue.Tests.Functional
             // act
             var response = await client.GetAsync("api/combat/epic?attacker=Wolverine&defender=Beast");
 
-            // assert
-            response.EnsureSuccessStatusCode();
-            var result = await response.Content.ReadAsAsync<CombatResult>();
-            Assert.Equal("Life is life", result.VictoryPhrase);
+            // assert            
+            mockHttp.VerifyNoOutstandingExpectation();
         }
 
         public void Dispose()

@@ -23,13 +23,5 @@ namespace MutantsCatalogue.Application.Controllers
 
             return NotFound();
         }
-
-        [HttpPost()]
-        public ActionResult Post([FromBody] Mutant mutant)
-        {
-            mutantsService.Add(mutant);
-            return Ok();
-        }
-        
     }
 }
