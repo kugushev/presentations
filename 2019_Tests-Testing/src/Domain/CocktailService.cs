@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain
@@ -38,6 +39,29 @@ namespace Domain
                 default:
                     return null;
             }
+        }
+
+        public decimal? FindBestPrice(string name, decimal? currentPrice)
+        {
+            var id = barsProvider.FindCocktailId(name);
+            if (id != null || currentPrice == null)
+            {
+                var prices = barsProvider
+                    .FindPrices(id != null ? id.Value : 0);
+                currentPrice = prices.Min();
+            }
+            return currentPrice;
+        }
+
+        public Cocktail ManualMix(IReadOnlyCollection<Ingridient> ingridients)
+        {
+            var allowed = ingridients.Where(i => !i.IsAlcohol).ToList();
+
+            int removedCount = ingridients.Count - allowed.Count;
+
+            string name = $"Cocktail with {ingridients.First()}";
+
+            return new Cocktail();
         }
     }
 }

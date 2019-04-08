@@ -1,0 +1,125 @@
+{
+  ".\\bin\\Debug\\netcoreapp2.2\\Domain.dll": {
+    "C:\\Projects\\my\\presentations\\2019_Tests-Testing\\src\\Domain\\Cocktail.cs": {
+      "Domain.Cocktail": {
+        "System.String Domain.Cocktail::get_Name()": {
+          "Lines": {
+            "9": 0
+          },
+          "Branches": []
+        },
+        "System.Double Domain.Cocktail::get_Size()": {
+          "Lines": {
+            "10": 0
+          },
+          "Branches": []
+        },
+        "System.TimeSpan Domain.Cocktail::get_PreparationTime()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        },
+        "System.TimeSpan Domain.Cocktail::get_TotalTime()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "System.String Domain.Cocktail::get_Instructions()": {
+          "Lines": {
+            "13": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "C:\\Projects\\my\\presentations\\2019_Tests-Testing\\src\\Domain\\CocktailService.cs": {
+      "Domain.CocktailService": {
+        "Domain.Cocktail Domain.CocktailService::Mix(System.String,System.Nullable`1<System.Decimal>&)": {
+          "Lines": {
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "24": 0,
+            "26": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "34": 0,
+            "35": 0,
+            "36": 0,
+            "37": 0,
+            "39": 0,
+            "41": 0
+          },
+          "Branches": [
+            {
+              "Line": 18,
+              "Offset": 23,
+              "EndOffset": 25,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 18,
+              "Offset": 23,
+              "EndOffset": 65,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 81,
+              "EndOffset": 83,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 95,
+              "EndOffset": 99,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 81,
+              "EndOffset": 188,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 95,
+              "EndOffset": 188,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            }
+          ]
+        },
+        "System.Void Domain.CocktailService::.ctor(Domain.IBarsProvider)": {
+          "Lines": {
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0
+          },
+          "Branches": []
+        }
+      }
+    }
+  }
+}

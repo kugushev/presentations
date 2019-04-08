@@ -44,11 +44,25 @@ namespace Tests
         }
 
         [Theory]
-        [InlineData(1, 2, 3)]
+        [InlineData(1, 2)]
         public void Test(int first, int second)
         {
             Assert.Equal(1, first);
             Assert.Equal(2, second);
+        }
+
+        [Fact]
+        public void Mix_FindBestPrice_ReturnsMinPrice()
+        {
+            // arrange
+            var barsProvider = Substitute.For<IBarsProvider>();
+            barsProvider.FindCocktailId("mojito").Returns(cocktailId);
+            barsProvider.FindPrices(cocktailId).Returns(new[] { 100m, 200m });
+            var service = new CocktailService(barsProvider);
+            // act
+            decimal? result = service.FindBestPrice("mojito", null);
+            // assert
+            Assert.Equal(100m, result.Value);
         }
     }
 }
