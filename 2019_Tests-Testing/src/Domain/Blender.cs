@@ -5,13 +5,13 @@ namespace Domain
 {
     public class Blender
     {
-        private readonly List<Ingridient> ingridients = new List<Ingridient>();
+        private readonly List<Ingredient> ingridients = new List<Ingredient>();
 
-        public void Add(Ingridient ingridient) => ingridients.Add(ingridient);
+        public void Add(Ingredient ingridient) => ingridients.Add(ingridient);
 
-        public Ingridient Blend()
+        public Ingredient Blend()
         {
-            return new Ingridient
+            return new Ingredient
             {
                 Amount = ingridients.Sum(x => x.Amount),
                 IsAlcohol = ingridients.Any(x => x.IsAlcohol)

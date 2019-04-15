@@ -50,30 +50,30 @@ namespace Domain
             return currentPrice;
         }
 
-        public Cocktail ManualMix(IReadOnlyCollection<Ingridient> ingridients)
+        public Cocktail ManualMix(IReadOnlyCollection<Ingredient> ingredient)
         {
-            var allowed = ingridients.Where(i => !i.IsAlcohol).ToList();
+            var allowed = ingredient.Where(i => !i.IsAlcohol).ToList();
 
-            int removedCount = ingridients.Count - allowed.Count;
+            int removedCount = ingredient.Count - allowed.Count;
 
-            string name = $"Cocktail with {ingridients.First()}";
+            string name = $"Cocktail with {ingredient.First()}";
 
             return new Cocktail();
         }
 
-        public Cocktail MixMilkShake(Ingridient milk, Ingridient vanillaIceCream)
+        public Cocktail MixMilkShake(Ingredient milk, Ingredient iceCream)
         {
             var blender = new Blender();
             blender.Add(milk);
-            blender.Add(vanillaIceCream);
+            blender.Add(iceCream);
             var blended = blender.Blend();
             ThrowIfAlcohol(blended);
             return blended.ToCocktail("Milkshake");
         }
 
-        private void ThrowIfAlcohol(Ingridient ingridient)
+        private void ThrowIfAlcohol(Ingredient ingredient)
         {
-            if (ingridient.IsAlcohol)
+            if (ingredient.IsAlcohol)
                 throw new Exception("No Alcohol allowed");
         }
     }

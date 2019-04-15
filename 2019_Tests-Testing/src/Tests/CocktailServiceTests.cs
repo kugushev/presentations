@@ -72,8 +72,8 @@ namespace Tests
             // arrange
             var service = new CocktailService(Substitute.For<IBarsProvider>());
             // act
-            Cocktail result = service.MixMilkShake(new Ingridient { Amount = 1 }, 
-                new Ingridient());
+            Cocktail result = service.MixMilkShake(new Ingredient { Amount = 1 }, 
+                new Ingredient());
             // assert
             Assert.Equal("Milkshake", result.Name);
             Assert.Equal(1.0, result.Size);
