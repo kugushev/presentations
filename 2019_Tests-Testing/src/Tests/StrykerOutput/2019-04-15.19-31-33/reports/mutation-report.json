@@ -1,0 +1,275 @@
+{
+  "schemaVersion": "1.0.0",
+  "thresholds": {
+    "high": 80,
+    "low": 60
+  },
+  "files": {
+    "Domain\\Blender.cs": {
+      "language": "cs",
+      "source": "using System.Collections.Generic;\r\nusing System.Linq;\r\n\r\nnamespace Domain\r\n{\r\n    public class Blender\r\n    {\r\n        private readonly List<Ingridient> ingridients = new List<Ingridient>();\r\n\r\n        public void Add(Ingridient ingridient) => ingridients.Add(ingridient);\r\n\r\n        public Ingridient Blend()\r\n        {\r\n            return new Ingridient\r\n            {\r\n                Amount = ingridients.Sum(x => x.Amount),\r\n                IsAlcohol = ingridients.Any(x => x.IsAlcohol)\r\n            };\r\n        }\r\n    }\r\n}\r\n",
+      "mutants": []
+    },
+    "Domain\\Cocktail.cs": {
+      "language": "cs",
+      "source": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Text;\r\n\r\nnamespace Domain\r\n{\r\n    public class Cocktail\r\n    {\r\n        public Cocktail(int commentsCount)\r\n        {\r\n            Comments = new List<string>(commentsCount);\r\n        }\r\n        public List<string> Comments { get; set; }\r\n        public Cocktail() { }\r\n        public string Name { get; set; }\r\n        public double Size { get; set; }\r\n        public TimeSpan PreparationTime { get; set; }\r\n        public TimeSpan TotalTime { get; set; }\r\n        public string Instructions { get; set; }        \r\n    }\r\n}\r\n",
+      "mutants": []
+    },
+    "Domain\\CocktailService.cs": {
+      "language": "cs",
+      "source": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\n\r\nnamespace Domain\r\n{\r\n    public class CocktailService\r\n    {\r\n        private readonly IBarsProvider barsProvider;\r\n\r\n        public CocktailService(IBarsProvider barsProvider) => this.barsProvider = barsProvider;\r\n\r\n        public Cocktail Mix(string name, out decimal? bestPrice)\r\n        {\r\n            var id = barsProvider.FindCocktailId(name);\r\n            if (id != null)\r\n            {\r\n                var prices = barsProvider.FindPrices(id.Value);\r\n                bestPrice = prices.Min();\r\n            }\r\n            else\r\n                bestPrice = null;\r\n\r\n            switch (name)\r\n            {\r\n                case \"mojito\":\r\n                    var cocktail = new Cocktail\r\n                    {\r\n                        Name = name,\r\n                        Size = 0.5,\r\n                        PreparationTime = TimeSpan.FromMinutes(5),\r\n                        TotalTime = TimeSpan.FromMinutes(5),\r\n                        Instructions = \"The same as usual mojito but without alcohol\"\r\n                    };\r\n                    return cocktail;\r\n                default:\r\n                    return null;\r\n            }\r\n        }\r\n\r\n        public decimal? FindBestPrice(string name, decimal? currentPrice)\r\n        {\r\n            var id = barsProvider.FindCocktailId(name);\r\n            if (id != null || currentPrice == null)\r\n            {\r\n                var prices = barsProvider\r\n                    .FindPrices(id != null ? id.Value : 0);\r\n                currentPrice = prices.Min();\r\n            }\r\n            return currentPrice;\r\n        }\r\n\r\n        public Cocktail ManualMix(IReadOnlyCollection<Ingridient> ingridients)\r\n        {\r\n            var allowed = ingridients.Where(i => !i.IsAlcohol).ToList();\r\n\r\n            int removedCount = ingridients.Count - allowed.Count;\r\n\r\n            string name = $\"Cocktail with {ingridients.First()}\";\r\n\r\n            return new Cocktail();\r\n        }\r\n\r\n        public Cocktail MixMilkShake(Ingridient milk, Ingridient vanillaIceCream)\r\n        {\r\n            var blender = new Blender();\r\n            blender.Add(milk);\r\n            blender.Add(vanillaIceCream);\r\n            var blended = blender.Blend();\r\n            ThrowIfAlcohol(blended);\r\n            return blended.ToCocktail(\"Milkshake\");\r\n        }\r\n\r\n        private void ThrowIfAlcohol(Ingridient ingridient)\r\n        {\r\n            if (ingridient.IsAlcohol)\r\n                throw new Exception(\"No Alcohol allowed\");\r\n        }\r\n    }\r\n}\r\n",
+      "mutants": [
+        {
+          "id": 0,
+          "mutatorName": "Binary expression mutation",
+          "replacement": "id == null",
+          "location": {
+            "start": {
+              "line": 16,
+              "column": 17
+            },
+            "end": {
+              "line": 16,
+              "column": 27
+            }
+          },
+          "status": "Killed"
+        },
+        {
+          "id": 1,
+          "mutatorName": "String mutation",
+          "replacement": "\"\"",
+          "location": {
+            "start": {
+              "line": 26,
+              "column": 22
+            },
+            "end": {
+              "line": 26,
+              "column": 30
+            }
+          },
+          "status": "CompileError"
+        },
+        {
+          "id": 2,
+          "mutatorName": "String mutation",
+          "replacement": "\"\"",
+          "location": {
+            "start": {
+              "line": 33,
+              "column": 40
+            },
+            "end": {
+              "line": 33,
+              "column": 86
+            }
+          },
+          "status": "Survived"
+        },
+        {
+          "id": 3,
+          "mutatorName": "Binary expression mutation",
+          "replacement": "id == null ",
+          "location": {
+            "start": {
+              "line": 44,
+              "column": 17
+            },
+            "end": {
+              "line": 44,
+              "column": 27
+            }
+          },
+          "status": "Survived"
+        },
+        {
+          "id": 4,
+          "mutatorName": "Binary expression mutation",
+          "replacement": "currentPrice != null",
+          "location": {
+            "start": {
+              "line": 44,
+              "column": 31
+            },
+            "end": {
+              "line": 44,
+              "column": 51
+            }
+          },
+          "status": "Survived"
+        },
+        {
+          "id": 5,
+          "mutatorName": "Binary expression mutation",
+          "replacement": "id != null && currentPrice == null",
+          "location": {
+            "start": {
+              "line": 44,
+              "column": 17
+            },
+            "end": {
+              "line": 44,
+              "column": 51
+            }
+          },
+          "status": "Survived"
+        },
+        {
+          "id": 6,
+          "mutatorName": "Binary expression mutation",
+          "replacement": "id == null ",
+          "location": {
+            "start": {
+              "line": 47,
+              "column": 33
+            },
+            "end": {
+              "line": 47,
+              "column": 43
+            }
+          },
+          "status": "Killed"
+        },
+        {
+          "id": 7,
+          "mutatorName": "LogicalNotExpression to un-LogicalNotExpression mutation",
+          "replacement": "i.IsAlcohol",
+          "location": {
+            "start": {
+              "line": 55,
+              "column": 50
+            },
+            "end": {
+              "line": 55,
+              "column": 62
+            }
+          },
+          "status": "Survived"
+        },
+        {
+          "id": 8,
+          "mutatorName": "Binary expression mutation",
+          "replacement": "ingridients.Count + allowed.Count",
+          "location": {
+            "start": {
+              "line": 57,
+              "column": 32
+            },
+            "end": {
+              "line": 57,
+              "column": 65
+            }
+          },
+          "status": "Survived"
+        },
+        {
+          "id": 9,
+          "mutatorName": "String mutation",
+          "replacement": "$\"\"",
+          "location": {
+            "start": {
+              "line": 59,
+              "column": 27
+            },
+            "end": {
+              "line": 59,
+              "column": 65
+            }
+          },
+          "status": "Survived"
+        },
+        {
+          "id": 10,
+          "mutatorName": "Void mutation",
+          "replacement": ";",
+          "location": {
+            "start": {
+              "line": 67,
+              "column": 13
+            },
+            "end": {
+              "line": 67,
+              "column": 31
+            }
+          },
+          "status": "Killed"
+        },
+        {
+          "id": 11,
+          "mutatorName": "Void mutation",
+          "replacement": ";",
+          "location": {
+            "start": {
+              "line": 68,
+              "column": 13
+            },
+            "end": {
+              "line": 68,
+              "column": 42
+            }
+          },
+          "status": "Survived"
+        },
+        {
+          "id": 12,
+          "mutatorName": "Void mutation",
+          "replacement": ";",
+          "location": {
+            "start": {
+              "line": 70,
+              "column": 13
+            },
+            "end": {
+              "line": 70,
+              "column": 37
+            }
+          },
+          "status": "Survived"
+        },
+        {
+          "id": 13,
+          "mutatorName": "String mutation",
+          "replacement": "\"\"",
+          "location": {
+            "start": {
+              "line": 71,
+              "column": 39
+            },
+            "end": {
+              "line": 71,
+              "column": 50
+            }
+          },
+          "status": "Killed"
+        },
+        {
+          "id": 14,
+          "mutatorName": "String mutation",
+          "replacement": "\"\"",
+          "location": {
+            "start": {
+              "line": 77,
+              "column": 37
+            },
+            "end": {
+              "line": 77,
+              "column": 57
+            }
+          },
+          "status": "Survived"
+        }
+      ]
+    },
+    "Domain\\IBarsProvider.cs": {
+      "language": "cs",
+      "source": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Text;\r\n\r\nnamespace Domain\r\n{\r\n    public interface IBarsProvider\r\n    {\r\n        int? FindCocktailId(string cocktailName);\r\n        IReadOnlyCollection<decimal> FindPrices(int cocktailId);\r\n    }\r\n}\r\n",
+      "mutants": []
+    },
+    "Domain\\Ingridient.cs": {
+      "language": "cs",
+      "source": "using System;\r\nusing System.Collections.Generic;\r\nusing System.Text;\r\n\r\nnamespace Domain\r\n{\r\n    public class Ingridient\r\n    {\r\n        public bool IsAlcohol { get; set; }\r\n        public double Amount { get; set; }\r\n\r\n        public Cocktail ToCocktail(string name) => new Cocktail { Name = name, Size = Amount };\r\n    }\r\n}\r\n",
+      "mutants": []
+    }
+  }
+}

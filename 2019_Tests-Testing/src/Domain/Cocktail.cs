@@ -16,6 +16,6 @@ namespace Domain
         public double Size { get; set; }
         public TimeSpan PreparationTime { get; set; }
         public TimeSpan TotalTime { get; set; }
-        public string Instructions { get; set; }
+        public string Instructions { get; set; }        
     }
 }

@@ -8,5 +8,7 @@ namespace Domain
     {
         public bool IsAlcohol { get; set; }
         public double Amount { get; set; }
+
+        public Cocktail ToCocktail(string name) => new Cocktail { Name = name, Size = Amount };
     }
 }

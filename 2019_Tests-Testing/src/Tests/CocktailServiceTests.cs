@@ -10,7 +10,8 @@ namespace Tests
         private const int cocktailId = 42;
 
         [Fact]
-        public void Mix_Mojito_ReturnsMojito1(){
+        public void Mix_Mojito_ReturnsMojito1()
+        {
             // arrange
             var barsProvider = Substitute.For<IBarsProvider>();
             barsProvider.FindCocktailId("mojito").Returns(cocktailId);
@@ -64,5 +65,25 @@ namespace Tests
             // assert
             Assert.Equal(100m, result.Value);
         }
+
+        [Fact]
+        public void MixMilkShake_1Milk0IceCream_Returns1Milkshake()
+        {
+            // arrange
+            var service = new CocktailService(Substitute.For<IBarsProvider>());
+            // act
+            Cocktail result = service.MixMilkShake(new Ingridient { Amount = 1 }, 
+                new Ingridient());
+            // assert
+            Assert.Equal("Milkshake", result.Name);
+            Assert.Equal(1.0, result.Size);
+        }
+
+        // !!!Ask people about multi assert
+
+        /* missing tests: 
+         *  with non empty IceCream
+         *  with alcohol IceCream
+         */
     }
 }

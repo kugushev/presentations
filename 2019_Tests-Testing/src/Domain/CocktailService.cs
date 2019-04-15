@@ -8,10 +8,7 @@ namespace Domain
     {
         private readonly IBarsProvider barsProvider;
 
-        public CocktailService(IBarsProvider barsProvider)
-        {
-            this.barsProvider = barsProvider;
-        }
+        public CocktailService(IBarsProvider barsProvider) => this.barsProvider = barsProvider;
 
         public Cocktail Mix(string name, out decimal? bestPrice)
         {
@@ -62,6 +59,22 @@ namespace Domain
             string name = $"Cocktail with {ingridients.First()}";
 
             return new Cocktail();
+        }
+
+        public Cocktail MixMilkShake(Ingridient milk, Ingridient vanillaIceCream)
+        {
+            var blender = new Blender();
+            blender.Add(milk);
+            blender.Add(vanillaIceCream);
+            var blended = blender.Blend();
+            ThrowIfAlcohol(blended);
+            return blended.ToCocktail("Milkshake");
+        }
+
+        private void ThrowIfAlcohol(Ingridient ingridient)
+        {
+            if (ingridient.IsAlcohol)
+                throw new Exception("No Alcohol allowed");
         }
     }
 }
