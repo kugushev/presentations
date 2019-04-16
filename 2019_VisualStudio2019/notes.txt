@@ -13,26 +13,25 @@ Plan
 		И теперь он очень быстрый
 	Создать новый проект
 		Тут нет рекламы, списка видеоматериалов и проч.
-	Сверху сделали как в хроме	
-	Крутой поиск
-	Document Health: вообще очень круто, так как народ забывает открывать окошко с Errors
-	Code Cleanup: 
-		Remove and Sort Using перехал 
-		Настройка списка
-		.editorconfig
-	DoubleClick to project file: наконец то, особенно круто с учетом старой фичи с autocompletion
-	Clipboard Ring Menu: Ctrl + Shift + V 
-	Search in Debug
-	Консоль не отключается	
++	Сверху сделали как в хроме	
++	Крутой поиск
++	Document Health: вообще очень круто, так как народ забывает открывать окошко с Errors
++	Code Cleanup: 
++		Remove and Sort Using перехал 
++		Настройка списка
++		.editorconfig
++ DoubleClick to project file: наконец то, особенно круто с учетом старой фичи с autocompletion
++	Clipboard Ring Menu: Ctrl + Shift + V 
++	Search in Debug
++	Консоль не отключается	
 	Поиск по get/set
-	Рефакторинги:
++	Рефакторинги:
 		Синхронизация папки с namespace
 		Pull Members to interface
 		Wrap list of parameters
 		Extract interface to the same file
 	Запуск тестов из Solution Explorer
-	Kubernetes: только Azure
-	Solution Filtering
+	Kubernetes: только Azure	
 	
 	 
 	

@@ -1,0 +1,62 @@
+Вступление
+- Слайды
+- СТОЯТ ЛИ ФИЧИ ТОГО,ЧТО БЫ ПЕРЕХОДИТЬ СЕЙЧАС?
+- СМОГУ ЛИ Я БЫСТРЕЕ ПРОГРАММИРОВАТЬ С VS2019?
+Первое что бросается в глаза
+- Открыть студию
+	- "Наконец убрали лишнюю инфу"
+- Создать проект
+	- "Ничего особенного"
+- "Сверху как в хроме"
+- "Поиск как в VS Code"
+- Document Health
+	- люди не замечают warnings
+	- относится только к документу
+	- Alt + PgUp/Down
+- Code Cleanup
+	- "Куда делось подчитска using?"
+	- Запустить
+	- Добавить Remove unused variable
+	- Запустить снова
+	- Code Cleanup On Save
+	- .editorconfig
+		- Solution => Add New => TextFile
+		- 	root = true
+			[*.cs]
+			csharp_style_expression_bodied_methods = false
+		- запустить снова Code Cleanup	
+		
+Рефакторинги
+- Создать папку и перенести туда Startup.cs => fix namespace
+- Add Class => Add Method => Extract Interface => Same file
+- Add Property => Pull to interface
+- Add ctor => Show wrap parameters
+
+Приятные неожиданности
+- Производительность, по моим личным ощущениям
+	- Выдергивание окошка приводит к глюкам
+- Double Click to Project. <RootNamespace> => поменять в документе
+- Clipboard Ring
+- Change run profile => run => stop => console is runing
+	- Из плюсов - консоль перезапускается
+- Breakpoint to Get() => Watch this => Search User => Show Depth
+
+Без демо
+- Use property get/set => search separately
+- Run tests
+- Kubernetes
+
+Ложка дегтя:
+- Не работают ошибки
+- Иногда отваливается undo
+- Не работют большинство extensions
+
+Заключение
+- СТОЯТ ЛИ ФИЧИ ТОГО,ЧТО БЫ ПЕРЕХОДИТЬ СЕЙЧАС?
+	- Работать стало приятнее, продуктивность возрастает
+		- Performance
+		- Refactoring
+		- Всякие мелочи: search, code cleanup, clipboard ring, etc.
+	- Если используете Resharper, то не стоит
+	- Не удаляйте 2017: глюки + расширения
+- Слайды
