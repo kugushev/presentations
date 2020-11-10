@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>        
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SearchApp.Application\SearchApp.Application.csproj" />
+      <ProjectReference Include="..\SearchApp.Dal\SearchApp.Dal.csproj" />
+      <ProjectReference Include="..\SearchApp.Domain\SearchApp.Domain.csproj" />
+    </ItemGroup>
+
+
+</Project>
